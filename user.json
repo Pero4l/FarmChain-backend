@@ -1,0 +1,40 @@
+[
+    {
+        "userAuth":{
+            "id": 1,
+            "firstName": "John",
+            "lastName": "Doe",
+            "email": "test@gmail.com",
+            "phone": "1234567890",
+            "address": "123 Main St, City, Country",
+            "state": "Niger",
+            "country": "Nigeria",
+            "password": "password123",
+            "role": "user",
+            "isUser": true,
+            "createdAt": "2023-10-01T12:00:00Z"
+        },
+
+        "userProfile":{
+            "id": 1,
+            "userId": 1,
+            "bio": "This is a sample bio",
+            "profilePicture": "https://example.com/profile.jpg",
+            "socialLinks": {
+                "twitter": "https://twitter.com/johndoe",
+                "linkedin": "https://linkedin.com/in/johndoe"
+            },
+            "createdAt": "2023-10-01T12:00:00Z"
+        },
+
+        "post":{
+            "id": 1,
+            "userId": 1,
+            "title": "My First Post",
+            "content": "This is the content of my first post.",
+            "image": "https://example.com/post-image.jpg",
+            "createdAt": "2023-10-01T12:00:00Z"
+        }
+        
+    }
+]
