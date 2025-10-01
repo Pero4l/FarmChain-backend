@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const filePath = '/data.json'
+const filePath = './data.json'
 
 
 function readDb(){

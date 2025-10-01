@@ -1,45 +1,57 @@
 {
-        "users":[
-            {
-            "id": 1,
-            "firstName": "John",
-            "lastName": "Doe",
-            "email": "test@gmail.com",
-            "phone": "1234567890",
-            "address": "123 Main St, City, Country",
-            "state": "Niger",
-            "country": "Nigeria",
-            "password": "password123",
-            "role": "user",
-            "isUser": true,
-            "createdAt": "2023-10-01T12:00:00Z",
-
-            "userProfile":{
-            "userId": 1,
-            "bio": "This is a sample bio",
-            "profilePicture": "https://example.com/profile.jpg",
-            "socialLinks": {
-                "twitter": "https://twitter.com/johndoe",
-                "linkedin": "https://linkedin.com/in/johndoe"
-            },
-            "createdAt": "2023-10-01T12:00:00Z"
+  "users": [
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "test@gmail.com",
+      "phone": "1234567890",
+      "address": "123 Main St, City, Country",
+      "state": "Niger",
+      "country": "Nigeria",
+      "password": "password123",
+      "role": "user",
+      "isUser": true,
+      "createdAt": "2023-10-01T12:00:00Z",
+      "userProfile": {
+        "userId": 1,
+        "bio": "This is a sample bio",
+        "profilePicture": "https://example.com/profile.jpg",
+        "socialLinks": {
+          "twitter": "https://twitter.com/johndoe",
+          "linkedin": "https://linkedin.com/in/johndoe"
+        },
+        "createdAt": "2023-10-01T12:00:00Z"
+      }
+    },
+    {
+      "id": 2,
+      "firstName": "Peter",
+      "lastName": "Ptb",
+      "email": "ptb@gmail.com",
+      "phone": "09087838289",
+      "address": "14 Main St, Lekki",
+      "state": "Lagos",
+      "country": "Nigeria",
+      "password": "$2b$12$/qD9bIns9CoKUrc1uh3bs.IjAOIu2AGSKrNawc0H.7VMPDr95FQdG",
+      "createdAt": "10/1/2025, 11:17:15 PM",
+      "userProfile": {},
+      "notifications": [
+        {
+          "notification": "Account created successfully"
         }
-        }
-    ],
-
-    "posts":[
-            {
-                "id": 1,
-                "userId": 1,
-                "title": "My First Post",
-                "content": "This is the content of my first post.",
-                "image": "https://example.com/post-image.jpg",
-                "createdAt": "2023-10-01T12:00:00Z"
-            }
-        ],
-
-        "marketPlacePost": [
-            
-        ]
-
+      ]
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "userId": 1,
+      "title": "My First Post",
+      "content": "This is the content of my first post.",
+      "image": "https://example.com/post-image.jpg",
+      "createdAt": "2023-10-01T12:00:00Z"
+    }
+  ],
+  "marketPlacePost": []
 }
