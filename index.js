@@ -1,9 +1,10 @@
 const express = require('express')
 require('dotenv').config()
 const app = express()
-
-
 app.use(express.json())
+
+const userAuth = require('./router/user.route')
+
 
 app.get('/', (req, res) =>{
     res.status(200).json({
@@ -11,6 +12,10 @@ app.get('/', (req, res) =>{
         "message": "Wecome to Farm chain"
     })
 })
+
+app.use('/auth', userAuth)
+
+
 
 const PORT = process.env.PORT || 3001
 
