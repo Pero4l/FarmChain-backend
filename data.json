@@ -35,7 +35,7 @@
       "country": "Nigeria",
       "password": "$2b$12$/qD9bIns9CoKUrc1uh3bs.IjAOIu2AGSKrNawc0H.7VMPDr95FQdG",
       "createdAt": "10/1/2025, 11:17:15 PM",
-      "userProfile": {},
+      "userProfile": {"bio": "This is a sample bio"},
       "notifications": [
         {
           "notification": "Account created successfully"
