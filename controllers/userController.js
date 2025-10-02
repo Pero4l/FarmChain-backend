@@ -69,4 +69,26 @@ async function register(req, res) {
 }
 
 
-module.exports = {register}
+
+async function login(req, res) {
+
+    const token = jwt.sign({userId: req.data.id, currentUser: req.data.name}, process.env.JWT_SECRET, {expiresIn: '5h'})
+
+    const userId = req.data.id
+    const currentUser = req.data.name
+    
+    if(req.user){
+        return res.status(200).json({
+        "success": true,
+        "message": "Login Successfully",
+        "token": token,
+        "userId": userId,
+        "currentUser": currentUser
+    })
+    }
+    
+}
+
+
+
+module.exports = {register, login}
