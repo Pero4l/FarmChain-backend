@@ -1,5 +1,6 @@
 const {readDb, writeDb} = require('../utils/dbOperation')
 
 async function newsFeedPost(req, res) {
+    const{content, photo} = req.body
     
 }
