@@ -5,6 +5,14 @@ async function loginMiddleware(req, res, next){
     const {email, password} = req.body
 
     const data = readDb()
+
+    if(!email || ! password){
+        return res.status(401).json({
+            success: false,
+            message: "Email and password are equired"
+        });
+    }
+
     const existUser = data['users'].find((u) => u.email === email)
 
     if (!existUser) {
