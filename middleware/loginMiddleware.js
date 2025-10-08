@@ -2,18 +2,18 @@ const {readDb} = require('../utils/dbOperation')
 const bcrypt = require('bcrypt')
 
 async function loginMiddleware(req, res, next){
-    const {email, password} = req.body
+    const {email, phone, password} = req.body
 
     const data = readDb()
 
-    if(!email || ! password){
+    if ((!email && !phone) || !password) {
         return res.status(400).json({
             success: false,
-            message: "Email and password are equired"
+            message: "Either email or phone, and password, are required"
         });
     }
 
-    const existUser = data['users'].find((u) => u.email === email)
+    const existUser = data['users'].find((u) => u.email === email || u.phone === phone)
 
     if (!existUser) {
         return res.status(404).json({
