@@ -4,11 +4,11 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 async function register(req, res) {
-    const {firstName, lastName, phone, email, address, state, country, password} = req.body;
+    const {firstName, lastName, gender, phone, email, address, state, country, password} = req.body;
 
     let data = readDb()
 
-     if (!firstName || !lastName || !phone || !address || !state || !country || !email || !password) {
+     if (!firstName || !lastName || !gender || !phone || !address || !state || !country || !email || !password) {
         return res.status(400).json({message: "All fields are required"});
     }
     
@@ -44,7 +44,8 @@ async function register(req, res) {
     const newUser = {
         id,
         firstName,
-        lastName, 
+        lastName,
+        gender, 
         email, 
         phone, 
         address, 
@@ -67,7 +68,6 @@ async function register(req, res) {
         "data": newUser
     });
 }
-
 
 
 async function login(req, res) {
