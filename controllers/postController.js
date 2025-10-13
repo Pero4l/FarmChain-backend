@@ -1,4 +1,6 @@
 const {readDb, writeDb} = require('../utils/dbOperation')
+const dayjs = require('dayjs');
+const relativeTime = require('dayjs/plugin/relativeTime');
 
 async function newsFeedPost(req, res) {
     const{content} = req.body
@@ -22,7 +24,7 @@ async function newsFeedPost(req, res) {
     }
 
     const user = req.user
-    const postAt = new Date().toISOString();
+    const postAt =  new Date().toISOString().split('.')[0] + 'Z'; 
 
     const id = data['posts'].length + 1
     const farmer = user.name
