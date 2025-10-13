@@ -23,14 +23,18 @@ async function newsFeedPost(req, res) {
 
     const user = req.user
     const id = data['posts'].length + 1
-    const farm = user.name
+    const farmer = user.name
     const location = user.location
     const avatar = user.id
     const gist = content
     
+    
 
     const newPost = {
-
+        id,
+        farmer,
+        location,
+        avatar,
     }
 
 }
