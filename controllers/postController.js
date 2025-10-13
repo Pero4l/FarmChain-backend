@@ -22,10 +22,14 @@ async function newsFeedPost(req, res) {
     }
 
     const user = req.user
+    const postAt = new Date().toISOString();
+
     const id = data['posts'].length + 1
     const farmer = user.name
     const location = user.location
     const avatar = user.id
+    const post_at = postAt
+    const time = 
     const gist = content
     
     
