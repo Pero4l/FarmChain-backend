@@ -12,5 +12,7 @@ async function newsFeedPost(req, res) {
         })
     }
 
+    const existPost = data['posts'].find((p) => p.content === content)
+
     
 }
