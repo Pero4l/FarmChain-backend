@@ -26,6 +26,7 @@ async function newsFeedPost(req, res) {
     const farm = user.name
     const location = user.location
     const avatar = user.id
+    const gist = content
     
 
     const newPost = {
