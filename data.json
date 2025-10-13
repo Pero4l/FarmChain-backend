@@ -51,6 +51,31 @@
       "content": "This is the content of my first post.",
       "image": "https://example.com/post-image.jpg",
       "createdAt": "2023-10-01T12:00:00Z"
+    },
+        {
+      "id": 1,
+      "farmer": "Sarah Johnson",
+      "location": "Iowa, USA",
+      "avatar": "SJ",
+      "time": "2 hours ago",
+      "verified": true,
+      "farmSize": "50 acres",
+      "content":
+        "BREAKTHROUGH HARVEST! My companion planting experiment yielded 40% more tomatoes than last season! Planting basil and marigolds alongside tomatoes not only increased yield but naturally repelled pests. Zero pesticides used! Who wants the detailed planting schedule?",
+      "images": [
+        "bg-gradient-to-br from-red-500 via-orange-400 to-yellow-500",
+        "bg-gradient-to-br from-green-500 to-emerald-600"
+      ],
+      "likes": 142,
+      "comments": 34,
+      "shares": 18,
+      "type": "success-story",
+      "tags": [
+        "#OrganicFarming",
+        "#CompanionPlanting",
+        "#SustainableAgriculture"
+      ],
+      "category": "small-scale"
     }
   ],
   "marketPlacePost": []
