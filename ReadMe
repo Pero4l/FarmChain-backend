@@ -2,3 +2,41 @@ I am building an API for my personal project named Farm-Chain.
 Farm Chain is a software i am building to solve a problem by bring farmer together to connect, collabrate and grow together.
 
 
+Got it! Here’s a clean, easy-to-read version of your API endpoints formatted for a README file, without using a table:
+
+---
+
+## API Endpoints (Example)
+
+### Authentication
+
+* **POST** `/api/auth/register`
+  Register a new user.
+
+* **POST** `/api/auth/login`
+  Authenticate an existing user and obtain access.
+
+### Users
+
+* **GET** `/api/users/:id`
+  Retrieve the profile details of a user by their ID.
+
+### Forum Posts
+
+* **POST** `/api/posts`
+  Create a new forum post.
+
+* **GET** `/api/posts`
+  Fetch all forum posts.
+
+### Marketplace
+
+* **POST** `/api/market`
+  Add a new item for sale to the marketplace.
+
+* **GET** `/api/market`
+  Retrieve all marketplace listings.
+
+---
+
+Would you like me to add example request/response snippets or notes on authentication?
