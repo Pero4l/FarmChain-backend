@@ -96,6 +96,70 @@
       "shares": 0,
       "tags": [],
       "category": "general"
+    },
+    {
+      "id": 4,
+      "userId": 2,
+      "farmer": "Peter Ptb",
+      "location": "Lagos, Nigeria",
+      "avatar": 2,
+      "postAt": "2025-10-14T21:42:38.460Z",
+      "time": "a few seconds ago",
+      "verified": false,
+      "content": "Hey i am testing 2",
+      "images": [],
+      "videos": [],
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "tags": [
+        "#cool #fun"
+      ],
+      "category": "general"
+    },
+    {
+      "id": 5,
+      "userId": 2,
+      "farmer": "Peter Ptb",
+      "location": "Lagos, Nigeria",
+      "avatar": 2,
+      "postAt": "2025-10-14T21:50:37.172Z",
+      "time": "a few seconds ago",
+      "verified": false,
+      "content": "Hey i am testing 3",
+      "images": [],
+      "videos": [],
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "tags": [
+        "#cool, #hhhhh, #uuuuu"
+      ],
+      "category": "general"
+    },
+    {
+      "id": 6,
+      "userId": 2,
+      "farmer": "Peter Ptb",
+      "location": "Lagos, Nigeria",
+      "avatar": 2,
+      "postAt": "2025-10-14T22:01:50.702Z",
+      "time": "a few seconds ago",
+      "verified": false,
+      "content": "Hey i am testing 5",
+      "images": [],
+      "videos": [],
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "tags": [
+        [
+          "#cool",
+          "#hhdhd,",
+          "#dkdkdkd"
+        ]
+      ],
+      "category": "general"
     }
   ],
   "marketPlacePost": []

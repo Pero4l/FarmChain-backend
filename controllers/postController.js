@@ -62,7 +62,7 @@ async function newsFeedPost(req, res) {
       });
     }
 
-    const { text } = req.body;
+    const { text, tags } = req.body;
     const files = req.files || {};  // multer populates this
     const images = files.images || [];
     const videos = files.videos || [];
@@ -184,6 +184,7 @@ async function newsFeedPost(req, res) {
     const time = dayjs(postAt).fromNow();
     const verified = user.verified;
     const content = text;
+    const tagArray = tags.split(" ").filter(Boolean);
 
     const newPost = {
       id: newId,
@@ -200,7 +201,7 @@ async function newsFeedPost(req, res) {
       likes: 0,
       comments: 0,
       shares: 0,
-      tags: [],
+      tags: [tagArray],
       category: user.category || 'general'
     };
 
