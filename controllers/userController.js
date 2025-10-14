@@ -72,7 +72,13 @@ async function register(req, res) {
 
 async function login(req, res) {
 
-    const token = jwt.sign({userId: req.data.id, currentUser: req.data.firstName, lastName:req.data.lastName, location: req.data.location, verified: req.data.verified}, process.env.JWT_SECRET, {expiresIn: '5h'})
+    const token = jwt.sign({
+        userId: req.data.id,
+        currentUser: `${req.data.firstName} ${req.data.lastName}`, 
+        location: `${req.data.state}, ${req.data.country}`, 
+        verified: req.data.verified}, process.env.JWT_SECRET, {expiresIn: '5h'})
+
+
 
     const userId = req.data.id
     const currentUser = `${req.data.firstName} ${req.data.lastName}`

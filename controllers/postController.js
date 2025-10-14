@@ -176,10 +176,10 @@ async function newsFeedPost(req, res) {
 
     // Build new post
     const newId = data.posts.length + 1;
-    const userIdd = userId
-    const farmer = user.name;
+    const userId = user.userId;
+    const farmer = user.currentUser;
     const location = user.location;
-    const avatar = user.id; 
+    const avatar = user.userId; 
     const postAt = new Date().toISOString();
     const time = dayjs(postAt).fromNow();
     const verified = user.verified;
@@ -187,6 +187,7 @@ async function newsFeedPost(req, res) {
 
     const newPost = {
       id: newId,
+      userId,
       farmer,
       location,
       avatar,

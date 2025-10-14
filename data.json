@@ -35,7 +35,9 @@
       "country": "Nigeria",
       "password": "$2b$12$/qD9bIns9CoKUrc1uh3bs.IjAOIu2AGSKrNawc0H.7VMPDr95FQdG",
       "createdAt": "10/1/2025, 11:17:15 PM",
-      "userProfile": {"bio": "This is a sample bio"},
+      "userProfile": {
+        "bio": "This is a sample bio"
+      },
       "verified": false,
       "notifications": [
         {
@@ -53,7 +55,7 @@
       "image": "https://example.com/post-image.jpg",
       "createdAt": "2023-10-01T12:00:00Z"
     },
-        {
+    {
       "id": 2,
       "farmer": "Sarah Johnson",
       "location": "Iowa, USA",
@@ -61,8 +63,7 @@
       "time": "2 hours ago",
       "verified": true,
       "farmSize": "50 acres",
-      "content":
-        "BREAKTHROUGH HARVEST! My companion planting experiment yielded 40% more tomatoes than last season! Planting basil and marigolds alongside tomatoes not only increased yield but naturally repelled pests. Zero pesticides used! Who wants the detailed planting schedule?",
+      "content": "BREAKTHROUGH HARVEST! My companion planting experiment yielded 40% more tomatoes than last season! Planting basil and marigolds alongside tomatoes not only increased yield but naturally repelled pests. Zero pesticides used! Who wants the detailed planting schedule?",
       "images": [
         "bg-gradient-to-br from-red-500 via-orange-400 to-yellow-500",
         "bg-gradient-to-br from-green-500 to-emerald-600"
@@ -77,6 +78,24 @@
         "#SustainableAgriculture"
       ],
       "category": "small-scale"
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "farmer": "Peter Ptb",
+      "location": "Lagos, Nigeria",
+      "avatar": 2,
+      "postAt": "2025-10-14T21:29:45.202Z",
+      "time": "a few seconds ago",
+      "verified": false,
+      "content": "Hey i am testing",
+      "images": [],
+      "videos": [],
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "tags": [],
+      "category": "general"
     }
   ],
   "marketPlacePost": []
