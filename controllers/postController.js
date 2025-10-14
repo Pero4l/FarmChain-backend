@@ -176,6 +176,7 @@ async function newsFeedPost(req, res) {
 
     // Build new post
     const newId = data.posts.length + 1;
+    const userIdd = userId
     const farmer = user.name;
     const location = user.location;
     const avatar = user.id; 
@@ -213,5 +214,8 @@ async function newsFeedPost(req, res) {
     });
   });
 }
+
+
+
 
 module.exports = { newsFeedPost };
