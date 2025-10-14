@@ -214,6 +214,9 @@ async function newsFeedPost(req, res) {
       message: 'Post created successfully',
       post: newPost
     });
+
+    const userCheck = 
+
   });
 }
 
