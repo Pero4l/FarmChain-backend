@@ -207,6 +207,8 @@ async function newsFeedPost(req, res) {
 
     // save
     data.posts.push(newPost);
+  const userCheck = data['users'].find((u)=> u.id === userId)
+  userCheck.notifications.push({notification:`Post created successfully`})
     writeDb(data);
 
     return res.status(201).json({
@@ -214,10 +216,12 @@ async function newsFeedPost(req, res) {
       message: 'Post created successfully',
       post: newPost
     });
-
-    const userCheck = 
-
+    
   });
+
+
+
+
 }
 
 
