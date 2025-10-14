@@ -5,3 +5,5 @@ const {authMiddleware} = require('../middleware/authUserMiddleware')
 const {newsFeedPost} = require('../controllers/postController')
 
 router.post('/create', authMiddleware, newsFeedPost)
+
+module.exports = router
