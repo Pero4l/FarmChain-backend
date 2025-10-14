@@ -201,7 +201,7 @@ async function newsFeedPost(req, res) {
       likes: 0,
       comments: 0,
       shares: 0,
-      tags: [tagArray],
+      tags: tagArray,
       category: user.category || 'general'
     };
 
