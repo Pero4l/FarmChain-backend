@@ -4,6 +4,7 @@ const app = express()
 app.use(express.json())
 
 const userAuth = require('./router/user.route')
+const post = require('./router/post.route')
 
 
 app.get('/', (req, res) =>{
@@ -14,6 +15,7 @@ app.get('/', (req, res) =>{
 })
 
 app.use('/auth', userAuth)
+app.use('/post', post)
 
 
 
