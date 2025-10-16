@@ -227,6 +227,14 @@ async function newsFeedPost(req, res) {
 
 
 async function getAllPost(req, res) {
+  const data = readDb()
+
+  try{
+    res.status(200).json({
+      "sucess": true,
+      "message": "Gotten all posts sucessfully"
+    })
+  }
   
 }
 
