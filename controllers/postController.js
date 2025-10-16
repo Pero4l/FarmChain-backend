@@ -245,6 +245,13 @@ async function getAllPost(req, res) {
 }
 
 
+async function updatePost(req, res) {
+  const {id} = req.body;
+
+  
+  
+}
+
 
 
 module.exports = { newsFeedPost, getAllPost };
