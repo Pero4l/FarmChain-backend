@@ -6,6 +6,7 @@ const relativeTime = require('dayjs/plugin/relativeTime');
 const { body, validationResult } = require('express-validator');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
+const { post } = require('../router/post.route');
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 
@@ -229,11 +230,13 @@ async function newsFeedPost(req, res) {
 async function getAllPost(req, res) {
   const data = readDb()
 
+  const allPosts = data['posts']
+
   try{
     res.status(200).json({
       "sucess": true,
       "message": "Gotten all posts sucessfully",
-      "posts": data
+      "posts": allPosts
     })
   } catch (err){
     console.log("Error getting posts", err);
