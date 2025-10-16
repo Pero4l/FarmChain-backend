@@ -244,4 +244,4 @@ async function getAllPost(req, res) {
 
 
 
-module.exports = { newsFeedPost };
+module.exports = { newsFeedPost, getAllPost };
