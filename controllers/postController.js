@@ -251,6 +251,7 @@ async function updatePost(req, res) {
   
   const user = req.user
   const userCheck = data['users'].find((u)=> u.id === user.userId)
+  const postCheck = data['posts'].find((p) )
   
   
   
