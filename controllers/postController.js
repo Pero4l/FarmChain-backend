@@ -246,10 +246,11 @@ async function getAllPost(req, res) {
 
 
 async function updatePost(req, res) {
-  const {id} = req.body;
+  const {id, text} = req.body;
+  const data = readDb()
   
-  const 
-  const userCheck =
+  const user = req.user
+  const userCheck = data['users'].find((u)=> u.id === user.userId)
   
   
   
