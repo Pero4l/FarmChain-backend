@@ -232,8 +232,11 @@ async function getAllPost(req, res) {
   try{
     res.status(200).json({
       "sucess": true,
-      "message": "Gotten all posts sucessfully"
+      "message": "Gotten all posts sucessfully",
+      "posts": data
     })
+  } catch (err){
+    console.log("Error getting posts", err);
   }
   
 }
