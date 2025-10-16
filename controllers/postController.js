@@ -247,7 +247,10 @@ async function getAllPost(req, res) {
 
 async function updatePost(req, res) {
   const {id} = req.body;
-
+  
+  const 
+  const userCheck =
+  
   
   
 }
