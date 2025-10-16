@@ -253,7 +253,12 @@ async function updatePost(req, res) {
   const userCheck = data['users'].find((u)=> u.id === user.userId)
   const postCheck = data['posts'].find((p)=> p.userId === user.userId )
 
-  if(!text)
+  if(text === postCheck.content){
+    return res.status(400).json({
+      "sucess": false,
+      "message": "Content still the same nothing changed",
+    })
+  }
   
   
   
