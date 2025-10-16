@@ -226,5 +226,11 @@ async function newsFeedPost(req, res) {
 
 
 
+async function getAllPost(req, res) {
+  
+}
+
+
+
 
 module.exports = { newsFeedPost };
