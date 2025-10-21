@@ -266,4 +266,5 @@ async function updatePost(req, res) {
 
 
 
+
 module.exports = { newsFeedPost, getAllPost };
