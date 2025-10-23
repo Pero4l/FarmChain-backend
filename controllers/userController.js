@@ -100,5 +100,10 @@ async function login(req, res) {
 }
 
 
+async function getUser(req, res) {
+    
+}
+
+
 
 module.exports = {register, login}
