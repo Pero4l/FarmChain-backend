@@ -1,4 +1,5 @@
 const {readDb, writeDb} = require('../utils/dbOperation')
+import { users } from '../models/users';
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
@@ -100,11 +101,27 @@ async function login(req, res) {
 }
 
 
-async function getUser(req, res) {
-    const {id} = req.params
+// Get all users
+export const getAllUsers = async (req, res) => {
+  try {
+    const allUsers = await users.findAll();
+    res.json(allUsers);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
-    
-}
+// Get single user by ID
+export const getUserById = async (req, res) => {
+  try {
+    const user = await users.findByPk(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 
 
 
