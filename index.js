@@ -1,10 +1,16 @@
 const express = require('express')
 require('dotenv').config()
+import { sequelize } from './models/index.js';
 const app = express()
 app.use(express.json())
 
 const userAuth = require('./router/user.route')
 const post = require('./router/post.route')
+
+
+sequelize.authenticate()
+  .then(() => console.log('✅ Connected to MySQL'))
+  .catch(err => console.error('❌ Database connection failed:', err));
 
 
 app.get('/', (req, res) =>{
