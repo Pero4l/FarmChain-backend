@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const{register, login} = require('../controllers/userController')
+import { getAllUsers, getUserById, createUser } from '../controllers/userController'
 const{loginMiddleware} = require('../middleware/loginMiddleware')
 
 
