@@ -20,6 +20,7 @@ app.get('/', (req, res) =>{
     })
 })
 
+
 app.use('/auth', userAuth)
 app.use('/post', post)
 app.use('/users', userAuth)
