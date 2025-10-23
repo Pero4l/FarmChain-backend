@@ -102,6 +102,7 @@ async function login(req, res) {
 
 async function getUser(req, res) {
     const {id} = req.params
+    
 }
 
 
