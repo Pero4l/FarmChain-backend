@@ -1,6 +1,6 @@
 const express = require('express')
 require('dotenv').config()
-import { sequelize } from './models/index.js';
+const { sequelize } = require('./models/index.js');
 const app = express()
 app.use(express.json())
 
@@ -22,6 +22,7 @@ app.get('/', (req, res) =>{
 
 app.use('/auth', userAuth)
 app.use('/post', post)
+app.use('/users', userAuth)
 
 
 

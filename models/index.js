@@ -63,4 +63,4 @@ sequelize.authenticate()
 //   timestamps: false    // disables createdAt/updatedAt
 // });
 
-module.exports = { sequelize, Users };
+module.exports = { sequelize };
