@@ -20,47 +20,47 @@ sequelize.authenticate()
   .catch(err => console.error('❌ Database connection failed:', err));
 
 // ✅ Define model for existing table
-const Users = sequelize.define('Users', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  first_name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  last_name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  gender: {
-    type: DataTypes.STRING
-  },
-  email: {
-    type: DataTypes.STRING
-  },
-  phone_no: {
-    type: DataTypes.STRING
-  },
-  address: {
-    type: DataTypes.STRING
-  },
-  state: {
-    type: DataTypes.STRING
-  },
-  country: {
-    type: DataTypes.STRING
-  },
-  password: {
-    type: DataTypes.STRING
-  },
-  registerd_at: {
-    type: DataTypes.DATE
-  }
-}, {
-  tableName: 'users',  // use your existing table
-  timestamps: false    // disables createdAt/updatedAt
-});
+// const Users = sequelize.define('Users', {
+//   id: {
+//     type: DataTypes.INTEGER,
+//     primaryKey: true,
+//     autoIncrement: true
+//   },
+//   first_name: {
+//     type: DataTypes.STRING,
+//     allowNull: false
+//   },
+//   last_name: {
+//     type: DataTypes.STRING,
+//     allowNull: false
+//   },
+//   gender: {
+//     type: DataTypes.STRING
+//   },
+//   email: {
+//     type: DataTypes.STRING
+//   },
+//   phone_no: {
+//     type: DataTypes.STRING
+//   },
+//   address: {
+//     type: DataTypes.STRING
+//   },
+//   state: {
+//     type: DataTypes.STRING
+//   },
+//   country: {
+//     type: DataTypes.STRING
+//   },
+//   password: {
+//     type: DataTypes.STRING
+//   },
+//   registerd_at: {
+//     type: DataTypes.DATE
+//   }
+// }, {
+//   tableName: 'users',  // use your existing table
+//   timestamps: false    // disables createdAt/updatedAt
+// });
 
 module.exports = { sequelize, Users };
