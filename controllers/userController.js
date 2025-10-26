@@ -1,5 +1,6 @@
 const {readDb, writeDb} = require('../utils/dbOperation')
-const { users } = require ('../models/users');
+const db = require('../models');
+const users = db.users;
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
