@@ -1,31 +1,9 @@
-const fs = require('fs')
+const { Sequelize } = require('sequelize');
 
-const filePath = './data.json'
+// Replace these values with your MySQL credentials
+const sequelize = new Sequelize('database_name', 'username', 'password', {
+  host: 'localhost', // or your MySQL server IP
+  dialect: 'mysql',
+});
 
-
-function readDb(){
-    try{
-        if(!fs.existsSync(filePath)) return {users: [], posts: [], marketPlacePost: []}
-        const data = fs.readFileSync(filePath, "utf-8")
-        return JSON.parse(data)
-    } catch (err){
-        console.log("Error reading file:", err);
-        return {users: [], posts: [], marketPlacePost: []}
-    }
-}
-
-
-function writeDb(data){
-    try{
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2))
-    } catch (err){
-        console.error("Error writing file:", err)
-    }
-}
-
-
-
-module.exports = {
-    readDb,
-    writeDb
-}
+module.exports = sequelize;
