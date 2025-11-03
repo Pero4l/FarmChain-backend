@@ -70,12 +70,14 @@ async function login(req, res) {
 
     const token = jwt.sign({
         userId: req.data.id,
-        currentUser: `${req.data.first_name} ${req.data.last_name}`, location: `${req.data.state}, ${req.data.country}`}, process.env.JWT_SECRET, {expiresIn: '5h'})
+        currentUser: `${req.data.first_name} ${req.data.last_name}`, 
+        location: `${req.data.state}, ${req.data.country}`}, 
+        process.env.JWT_SECRET, {expiresIn: '24h'})
 
 
 
     const userId = req.data.id
-    const currentUser = `${req.data.firstName} ${req.data.last_name}`
+    const currentUser = `${req.data.first_name} ${req.data.last_name}`
     const location = `${req.data.state}, ${req.data.country}`
     // const verified = req.data.verified
     
