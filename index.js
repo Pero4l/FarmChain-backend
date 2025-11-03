@@ -1,16 +1,18 @@
 const express = require('express')
 require('dotenv').config()
-const { sequelize } = require('./models/index.js');
 const app = express()
 app.use(express.json())
 
 const userAuth = require('./router/user.route')
 const post = require('./router/post.route')
 
+const db = require('./config/db.js')
+const User = require("./models/users.js")
 
-sequelize.authenticate()
-  .then(() => console.log('✅ Connected to MySQL'))
-  .catch(err => console.error('❌ Database connection failed:', err));
+
+// sequelize.authenticate()
+//   .then(() => console.log('✅ Connected to MySQL'))
+//   .catch(err => console.error('❌ Database connection failed:', err));
 
 
 app.get('/', (req, res) =>{
@@ -30,7 +32,18 @@ app.use('/users', userAuth)
 
 const PORT = process.env.PORT || 3001
 
-app.listen(PORT, () => {
-    console.log(`Server running on PORT:${PORT}`);
+
+
+db.sync({force: false, alter: false }).then(async() => {
+
+    await User.sync()
+
+     app.listen(PORT, () => {
+    console.log(`✅ Database connected successfully and Server running on PORT:${PORT}`);
+});
+
+}).catch((e)=>{
+    console.log(`❌ Database connection failed:`, e);
     
-}) 
+})
+

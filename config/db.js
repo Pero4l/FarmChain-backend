@@ -1,8 +1,14 @@
 const {sequelize, Sequelize} = require('sequelize')
+// require('dotenv').config();
 
-const connection = new Sequelize('farm_chain', 'sudo_ptb', 'p6565',{
-    host: "localhost",
+// const connection = new Sequelize(`${process.env.DB_NAME}, ${process.env.DB_USER}, ${process.env.DB_PASSWORD}`,{
+//     host: "localhost",
+//     dialect: "mysql"
+// })
+
+
+const connection = new Sequelize('test','ptb', '12345',{
+    host: "127.0.0.1",
     dialect: "mysql"
 })
-
-module.exports = connection
+module.exports = connection;
