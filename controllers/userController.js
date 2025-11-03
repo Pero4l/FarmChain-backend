@@ -14,14 +14,21 @@ async function register(req, res) {
 
     if (password.length < 6) {
       return res.status(400).json({ message: "Password must be at least 6 characters" });
+
     } else if (!/[A-Z]/.test(password) || !/[a-z]/.test(password)) {
       return res.status(400).json({ message: "Password must contain both uppercase and lowercase letters" });
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+
+    } else if (!/[0-9]/.test(password)) {
+      return res.status(400).json({ message: "Password must contain a number" });
+
+    }else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ message: "Invalid email format" });
+
     } else if (first_name.length < 3 || last_name.length < 3) {
       return res.status(400).json({ message: "Name must be at least 3 characters" });
     }
 
+    
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ success: false, message: "User already exists" });
@@ -63,15 +70,13 @@ async function login(req, res) {
 
     const token = jwt.sign({
         userId: req.data.id,
-        currentUser: `${req.data.first_name} ${req.data.last_name}`, 
-        location: `${req.data.state}, ${req.data.country}`, 
-        verified: req.data.verified}, process.env.JWT_SECRET, {expiresIn: '5h'})
+        currentUser: `${req.data.first_name} ${req.data.last_name}`, location: `${req.data.state}, ${req.data.country}`}, process.env.JWT_SECRET, {expiresIn: '5h'})
 
 
 
-    // const userId = req.data.id
-    // const currentUser = `${req.data.firstName} ${req.data.last_name}`
-    // const location = `${req.data.state}, ${req.data.country}`
+    const userId = req.data.id
+    const currentUser = `${req.data.firstName} ${req.data.last_name}`
+    const location = `${req.data.state}, ${req.data.country}`
     // const verified = req.data.verified
     
     if(req.user){
@@ -82,7 +87,7 @@ async function login(req, res) {
         "userId": userId,
         "currentUser": currentUser,
         "location": location,
-        "verified": verified
+        
     })
     }
     

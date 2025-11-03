@@ -1,28 +1,47 @@
-const {readDb} = require('../utils/dbOperation')
+const User = require('../models/users');
+const { Op } = require('sequelize');
+
+
 const bcrypt = require('bcrypt')
 
 async function loginMiddleware(req, res, next){
-    const {email, phone, password} = req.body
+    const {email, phone_no, password} = req.body
 
-    const data = readDb()
 
-    if ((!email && !phone) || !password) {
+    if ((!email && !phone_no) || !password) {
         return res.status(400).json({
             success: false,
-            message: "Either email or phone, and password, are required"
+            message: "Either email or phone, and password, is required"
         });
     }
 
-    const existUser = data['users'].find((u) => u.email === email || u.phone === phone)
+   
+const conditions = [];
+if (email) conditions.push({ email });
+if (phone_no) conditions.push({ phone_no });
 
-    if (!existUser) {
+if (conditions.length === 0) {
+  return res.status(400).json({
+    success: false,
+    message: "Either email or phone number must be provided"
+  });
+}
+
+const existingUser = await User.findOne({
+  attributes: ['id', 'password', 'first_name', 'last_name', 'state', 'country'],
+  where: { [Op.or]: conditions }
+});
+
+
+
+    if (!existingUser) {
         return res.status(404).json({
             success: false,
             message: "User does not exist"
         });
     }
 
-    const passMatch = await bcrypt.compare(password, existUser.password)
+    const passMatch = await bcrypt.compare(password, existingUser.password)
      if (!passMatch) {
         return res.status(401).json({
             success: false,
@@ -31,7 +50,7 @@ async function loginMiddleware(req, res, next){
     }
 
     req.user = passMatch
-    req.data = existUser
+    req.data = existingUser
     next()
 }
 
