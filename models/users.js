@@ -43,7 +43,7 @@ const User =
       allowNull: false
     },
     password: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(255),
       allowNull: false
     }
 },

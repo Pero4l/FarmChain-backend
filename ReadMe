@@ -37,10 +37,3 @@ Farm Chain is a software i am building to solve a problem by bring farmer togeth
 
 ---
 
-
-,
-    registerd_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
-    }

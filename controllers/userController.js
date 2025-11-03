@@ -1,4 +1,3 @@
-const sequelize = require('../utils/dbOperation');
 const User = require('../models/users');
 
 const bcrypt = require('bcrypt')
@@ -6,89 +5,74 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 async function register(req, res) {
-    // const {firstName, lastName, gender, phone, email, address, state, country, password} = req.body;
+  try {
+    const { first_name, last_name, gender, phone_no, email, address, state, country, password } = req.body;
 
-    const {name,email} = req.body;
-
-
-    //  if (!firstName || !lastName || !gender || !phone || !address || !state || !country || !email || !password) {
-    //     return res.status(400).json({message: "All fields are required"});
-    // }
-    
-    // if (password.length < 6) {
-    //     return res.status(400).json({
-    //         message: "Password must be at least 6 characters"
-    //     });
-
-    // } else if ( !/[A-Z]/.test(password) || !/[a-z]/.test(password)){
-    //      return res.status(400).json({
-    //         message: "Password must contain both uppercase and lowercase letters"
-    //     });
-
-    // } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    //     return res.status(400).json({message: "Invalid email format"});
-
-    // } else if (firstName.length < 3 || lastName.length < 3) {
-    //     return res.status(400).json({message: "Name must be at least 3 characters"});
-    // }
-
-    const existingUser = await User.findOne({ where: { email: email } });
-
-    if(existingUser){
-         return res.status(400).json({
-            "success": false,
-            "message": "User already exists"
-        })
+    if (!first_name || !last_name || !gender || !phone_no || !address || !state || !country || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
     }
 
+    if (password.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    } else if (!/[A-Z]/.test(password) || !/[a-z]/.test(password)) {
+      return res.status(400).json({ message: "Password must contain both uppercase and lowercase letters" });
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    } else if (first_name.length < 3 || last_name.length < 3) {
+      return res.status(400).json({ message: "Name must be at least 3 characters" });
+    }
 
-    // const hashedPassword = await bcrypt.hash(password, 12)
-    // const createdAt = new Date().toLocaleString();
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: "User already exists" });
+    }
 
-    // const newUser = {
-    //     id,
-    //     firstName,
-    //     lastName,
-    //     gender, 
-    //     email, 
-    //     phone, 
-    //     address, 
-    //     state, 
-    //     country, 
-    //     password: hashedPassword, 
-    //     createdAt, 
-    //     userProfile: {}, 
-    //     notifications: []}
-
-    // newUser['notifications'].push({notification:`Account created successfully`})
+    const hashedPassword = await bcrypt.hash(password, 12);
 
     await User.create({
-        name,email
-    })
-
-
-
-    res.status(201).json({ 
-        "success" : true,
-        "message": "Account registered successfully",
+      first_name,
+      last_name,
+      gender,
+      email,
+      phone_no,
+      address,
+      state,
+      country,
+      password: hashedPassword
     });
-}
+
+    return res.status(201).json({ 
+        success: true, 
+        message: "Account registered successfully" 
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ 
+        success: false, 
+        message: "Server error" 
+    });
+  }
+
+};
+
+
 
 
 async function login(req, res) {
 
     const token = jwt.sign({
         userId: req.data.id,
-        currentUser: `${req.data.firstName} ${req.data.lastName}`, 
+        currentUser: `${req.data.first_name} ${req.data.last_name}`, 
         location: `${req.data.state}, ${req.data.country}`, 
         verified: req.data.verified}, process.env.JWT_SECRET, {expiresIn: '5h'})
 
 
 
-    const userId = req.data.id
-    const currentUser = `${req.data.firstName} ${req.data.lastName}`
-    const location = `${req.data.state}, ${req.data.country}`
-    const verified = req.data.verified
+    // const userId = req.data.id
+    // const currentUser = `${req.data.firstName} ${req.data.last_name}`
+    // const location = `${req.data.state}, ${req.data.country}`
+    // const verified = req.data.verified
     
     if(req.user){
         return res.status(200).json({
