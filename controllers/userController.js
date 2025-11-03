@@ -1,6 +1,6 @@
-const {readDb, writeDb} = require('../utils/dbOperation')
-const db = require('../models');
-const users = db.users;
+const sequelize = require('../utils/dbOperation');
+const User = require('../models/users');
+
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
