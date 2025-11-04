@@ -1,7 +1,5 @@
-const User = require('../models/users');
+const User = require('../models/us');
 const { Op } = require('sequelize');
-
-
 const bcrypt = require('bcrypt')
 
 async function loginMiddleware(req, res, next){
