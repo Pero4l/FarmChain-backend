@@ -65,7 +65,6 @@ async function register(req, res) {
 
 
 
-
 async function login(req, res) {
 
     const token = jwt.sign({
