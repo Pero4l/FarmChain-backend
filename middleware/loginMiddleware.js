@@ -5,31 +5,24 @@ const { Op } = require('sequelize');
 const bcrypt = require('bcrypt')
 
 async function loginMiddleware(req, res, next){
-    const {email, phone_no, password} = req.body
+    const {user, password} = req.body
 
 
-    if ((!email && !phone_no) || !password) {
+    if (!user || !password) {
         return res.status(400).json({
             success: false,
-            message: "Either email or phone, and password, is required"
+            message: "Either email or phone number must be provided"
         });
     }
-
    
-const conditions = [];
-if (email) conditions.push({ email });
-if (phone_no) conditions.push({ phone_no });
 
-if (conditions.length === 0) {
-  return res.status(400).json({
-    success: false,
-    message: "Either email or phone number must be provided"
-  });
-}
 
 const existingUser = await User.findOne({
   attributes: ['id', 'password', 'first_name', 'last_name', 'state', 'country'],
-  where: { [Op.or]: conditions }
+  where: { [Op.or]: [
+        {email: user},
+        {phone_no: user}
+  ] }
 });
 
 
