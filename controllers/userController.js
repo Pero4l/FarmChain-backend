@@ -35,8 +35,8 @@ async function register(req, res) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-
-    await User.create({
+    
+    const newUser = {
       first_name,
       last_name,
       gender,
@@ -46,7 +46,9 @@ async function register(req, res) {
       state,
       country,
       password: hashedPassword
-    });
+    }
+
+    await User.create(newUser);
 
     return res.status(201).json({ 
         success: true, 
@@ -98,8 +100,12 @@ async function login(req, res) {
 // Get all users
 const getAllUsers = async (req, res) => {
   try {
-    const allUsers = await users.findAll();
-    res.json(allUsers);
+    const allUsers = await User.findAll({
+      attributes:{
+        exclude:['password']
+      }
+    });
+    res.status(200).json(allUsers);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -108,7 +114,7 @@ const getAllUsers = async (req, res) => {
 // Get single user by ID
 const getUserById = async (req, res) => {
   try {
-    const user = await users.findByPk(req.params.id);
+    const user = await User.findByPk(req.params.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.json(user);
   } catch (err) {
