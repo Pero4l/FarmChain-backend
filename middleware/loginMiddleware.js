@@ -1,10 +1,9 @@
-const User = require('../models/us');
+const User = require('../models/users');
 const { Op } = require('sequelize');
 const bcrypt = require('bcrypt')
 
 async function loginMiddleware(req, res, next){
     const {user, password} = req.body
-
 
     if (!user || !password) {
         return res.status(400).json({
@@ -14,7 +13,6 @@ async function loginMiddleware(req, res, next){
     }
    
 
-
 const existingUser = await User.findOne({
   attributes: ['id', 'password', 'first_name', 'last_name', 'state', 'country'],
   where: { [Op.or]: [
@@ -22,7 +20,6 @@ const existingUser = await User.findOne({
         {phone_no: user}
   ] }
 });
-
 
 
     if (!existingUser) {
