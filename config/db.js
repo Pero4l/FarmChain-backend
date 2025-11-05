@@ -7,3 +7,4 @@ const connection = new Sequelize( process.env.DB_NAME, process.env.DB_USER, proc
     dialect: "mysql"
 })
 module.exports = connection;
+
