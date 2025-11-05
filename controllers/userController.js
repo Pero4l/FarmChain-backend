@@ -1,42 +1,56 @@
-const User = require('../models/users');
-
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-require('dotenv').config()
+const { Users } = require("../models");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 async function register(req, res) {
   try {
-    const { first_name, last_name, gender, phone_no, email, address, state, country, password } = req.body;
+    const {
+      first_name,
+      last_name,
+      gender,
+      phone_no,
+      email,
+      address,
+      state,
+      country,
+      password,
+    } = req.body;
 
-    if (!first_name || !last_name || !gender || !phone_no || !address || !state || !country || !email || !password) {
+    if (
+      !first_name ||
+      !last_name ||
+      !gender ||
+      !phone_no ||
+      !address ||
+      !state ||
+      !country ||
+      !email ||
+      !password
+    ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
     if (password.length < 6) {
       return res.status(400).json({ message: "Password must be at least 6 characters" });
-
     } else if (!/[A-Z]/.test(password) || !/[a-z]/.test(password)) {
       return res.status(400).json({ message: "Password must contain both uppercase and lowercase letters" });
-
     } else if (!/[0-9]/.test(password)) {
       return res.status(400).json({ message: "Password must contain a number" });
-
-    }else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ message: "Invalid email format" });
-
     } else if (first_name.length < 3 || last_name.length < 3) {
       return res.status(400).json({ message: "Name must be at least 3 characters" });
     }
 
-    
-    const existingUser = await User.findOne({ where: { email } });
+    const existingUser = await Users.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ success: false, message: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    
-    const newUser = {
+
+    await Users.create({
       first_name,
       last_name,
       gender,
@@ -45,65 +59,57 @@ async function register(req, res) {
       address,
       state,
       country,
-      password: hashedPassword
-    }
-
-    await User.create(newUser);
-
-    return res.status(201).json({ 
-        success: true, 
-        message: "Account registered successfully" 
+      password: hashedPassword,
     });
 
+    return res.status(201).json({
+      success: true,
+      message: "Account registered successfully",
+    });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ 
-        success: false, 
-        message: "Server error" 
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
     });
   }
-
-};
-
-
-
-async function login(req, res) {
-
-    const token = jwt.sign({
-        userId: req.data.id,
-        currentUser: `${req.data.first_name} ${req.data.last_name}`, 
-        location: `${req.data.state}, ${req.data.country}`}, 
-        process.env.JWT_SECRET, {expiresIn: '24h'})
-
-
-
-    const userId = req.data.id
-    const currentUser = `${req.data.first_name} ${req.data.last_name}`
-    const location = `${req.data.state}, ${req.data.country}`
-    // const verified = req.data.verified
-    
-    if(req.user){
-        return res.status(200).json({
-        "success": true,
-        "message": "Login Successfully",
-        "token": token,
-        "userId": userId,
-        "currentUser": currentUser,
-        "location": location,
-        
-    })
-    }
-    
 }
 
+async function login(req, res) {
+  const token = jwt.sign(
+    {
+      userId: req.data.id,
+      currentUser: `${req.data.first_name} ${req.data.last_name}`,
+      location: `${req.data.state}, ${req.data.country}`,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "24h" }
+  );
+
+  const userId = req.data.id;
+  const currentUser = `${req.data.first_name} ${req.data.last_name}`;
+  const location = `${req.data.state}, ${req.data.country}`;
+  // const verified = req.data.verified
+
+  if (req.user) {
+    return res.status(200).json({
+      success: true,
+      message: "Login Successfully",
+      token: token,
+      userId: userId,
+      currentUser: currentUser,
+      location: location,
+    });
+  }
+}
 
 // Get all users
 const getAllUsers = async (req, res) => {
   try {
     const allUsers = await User.findAll({
-      attributes:{
-        exclude:['password']
-      }
+      attributes: {
+        exclude: ["password"],
+      },
     });
     res.status(200).json(allUsers);
   } catch (err) {
@@ -115,14 +121,12 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
+module.exports = { register, login, getAllUsers, getUserById };
 
-
-
-module.exports = {register, login, getAllUsers, getUserById}
