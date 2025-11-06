@@ -120,7 +120,7 @@ async function login(req, res) {
 // Get all users
 const getAllUsers = async (req, res) => {
   try {
-    const allUsers = await User.findAll({
+    const allUsers = await Users.findAll({
       attributes: {
         exclude: ["password"],
       },
@@ -134,7 +134,7 @@ const getAllUsers = async (req, res) => {
 // Get single user by ID
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await Users.findByPk(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
   } catch (err) {
