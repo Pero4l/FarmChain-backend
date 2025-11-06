@@ -70,7 +70,7 @@ async function register(req, res) {
 
       await Notifications.create({
         user_id: isUser.id,
-        notifications: 'Account created successfully'
+        notification: 'Account created successfully'
       })
       
     }
