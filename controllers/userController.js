@@ -62,10 +62,18 @@ async function register(req, res) {
       password: hashedPassword,
     });
 
+       // HANDLE NOTIFICATION
+    const isUser = await Users.findOne({ where: { email } });
+    if (isUser) {
+
+      
+    }
+
     return res.status(201).json({
       success: true,
       message: "Account registered successfully",
     });
+
   } catch (error) {
     console.error(error);
     return res.status(500).json({
