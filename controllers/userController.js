@@ -1,6 +1,8 @@
 const { Users } = require("../models");
+const {Notifications} = require("../models")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const notifications = require("../models/notifications");
 require("dotenv").config();
 
 async function register(req, res) {
@@ -66,6 +68,10 @@ async function register(req, res) {
     const isUser = await Users.findOne({ where: { email } });
     if (isUser) {
 
+      await Notifications.create({
+        user_id: isUser.id,
+        notifications: 'Account created successfully'
+      })
       
     }
 
