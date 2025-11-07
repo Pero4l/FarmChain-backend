@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     farmer: DataTypes.STRING,
     location: DataTypes.STRING,
     avatar: DataTypes.STRING,
-    time: DataTypes.STRING,
     verified: DataTypes.BOOLEAN,
     farmSize: DataTypes.STRING,
     content: DataTypes.TEXT,
@@ -27,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
     likes: DataTypes.INTEGER,
     comments: DataTypes.INTEGER,
     shares: DataTypes.INTEGER,
-    type: DataTypes.STRING,
     tags: DataTypes.JSON,
     category: DataTypes.STRING
   }, {
