@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
 
     }
   }
-
   posts.init({
     user_id: DataTypes.INTEGER,
     farmer: DataTypes.STRING,
