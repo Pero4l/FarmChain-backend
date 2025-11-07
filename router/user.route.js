@@ -10,7 +10,7 @@ const { authMiddleware } = require('../middleware/authUserMiddleware')
 
 router.post('/register', register)
 router.post('/login', loginMiddleware, login )
-router.get('/all', getAllUsers);
+router.get('/all', authMiddleware, getAllUsers);
 router.get('/:id', authMiddleware ,getUserById);
 
 module.exports = router
