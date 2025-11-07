@@ -12,8 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       posts.belongsTo(models.User, {as: 'user_post'})
+      
     }
   }
+
   posts.init({
     farmer: DataTypes.STRING,
     location: DataTypes.STRING,
