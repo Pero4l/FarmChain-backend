@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", userAuth);
 app.use("/post", post);
-app.use("/users", userAuth);
+app.use("/user", userAuth);
 
 const PORT = process.env.PORT || 3001;
 

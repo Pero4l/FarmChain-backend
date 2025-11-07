@@ -1,4 +1,4 @@
-const User = require("../models/users");
+const {Users} = require("../models");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 
@@ -12,7 +12,7 @@ async function loginMiddleware(req, res, next) {
     });
   }
 
-  const existingUser = await User.findOne({
+  const existingUser = await Users.findOne({
     attributes: [
       "id",
       "password",
