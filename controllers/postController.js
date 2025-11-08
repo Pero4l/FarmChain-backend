@@ -55,9 +55,6 @@ async function newsFeedPost(req, res) {
       }
 
       const {
-        user_id,
-        farmer,
-        location,
         avatar,
         verified,
         farmSize,
@@ -65,6 +62,12 @@ async function newsFeedPost(req, res) {
         tags,
         category,
       } = req.body;
+
+      const user = req.user
+
+      const user_id = user.userId
+      const farmer = user.currentUser
+      const location = user.location
 
       if (!content) {
         return res.status(400).json({ success: false, message: "Content is required" });
