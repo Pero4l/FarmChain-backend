@@ -2,7 +2,6 @@ const { Users } = require("../models");
 const {Notifications} = require("../models")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const notifications = require("../models/notifications");
 require("dotenv").config();
 
 async function register(req, res) {
