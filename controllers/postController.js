@@ -25,6 +25,7 @@ const upload = multer({
   },
 }).any();
 
+
 // Helper: upload to Cloudinary
 function uploadToCloudinary(fileBuffer, folder, resourceType = "image") {
   return new Promise((resolve, reject) => {
