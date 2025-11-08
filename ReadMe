@@ -36,3 +36,14 @@ Farm Chain is a software i am building to solve a problem by bring farmer togeth
   Retrieve all marketplace listings.
 
 ---
+
+
+
+avatar: SJ
+verified: true
+farmSize: 50 acres
+content: My new harvest results!
+tags: #OrganicFarming #Sustainable
+category: small-scale
+images: [upload image files]
+video: [upload video files]

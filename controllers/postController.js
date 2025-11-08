@@ -1,4 +1,5 @@
 const { Post } = require("../models");
+const { Users } = require("../models");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { v4: uuidv4 } = require("uuid");
@@ -102,6 +103,18 @@ async function newsFeedPost(req, res) {
         tags: tags ? tags.split(" ").filter(Boolean) : [],
         category: category || "general",
       });
+
+          // HANDLE NOTIFICATION
+    const isUser = await Users.findOne({ where: id=user_id});
+    if (isUser) {
+
+      await Notifications.create({
+        user_id: isUser.id,
+        notification: 'Post created successfully'
+      })
+      
+    }
+
 
       return res.status(201).json({
         success: true,
