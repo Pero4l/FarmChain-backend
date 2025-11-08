@@ -72,10 +72,10 @@ async function newsFeedPost(req, res) {
       }
 
       if (images.length && videos.length) {
-        if (images.length > 3 || videos.length > 2) {
+        if (images.length > 4 || videos.length > 2) {
           return res.status(400).json({
             success: false,
-            message: "When uploading both, max is 3 images and 2 videos",
+            message: "When uploading both, max is 4 images and 2 videos",
           });
         }
       }
@@ -120,7 +120,7 @@ async function newsFeedPost(req, res) {
       });
     } catch (error) {
       console.error("Error creating post:", error);
-      res.status(500).json({ success: false, message: "Internal server error" });
+      res.status(500).json({ success: false, message: "Unable to create post" });
     }
   });
 }
