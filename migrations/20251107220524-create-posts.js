@@ -39,7 +39,7 @@ module.exports = {
       images: {
         type: Sequelize.JSON
       },
-      video: {
+      videos: {
         type: Sequelize.JSON,
       },
       likes: {

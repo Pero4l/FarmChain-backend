@@ -1,4 +1,4 @@
-const { Post, Users, Notifications } = require("../models");
+const { Posts, Users, Notifications } = require("../models");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { v4: uuidv4 } = require("uuid");
@@ -56,9 +56,10 @@ async function newsFeedPost(req, res) {
       const farmer = user.currentUser;
       const location = user.location;
 
-      if (!content) {
-        return res.status(400).json({ success: false, message: "Content is required" });
-      }
+      // if (!content) {
+      //   return res.status(400).json({ success: false, message: "Content is required" });
+      // }
+
 
       const files = req.files || [];
       const images = files.filter((f) => f.mimetype.startsWith("image/"));
@@ -89,7 +90,7 @@ async function newsFeedPost(req, res) {
       ]);
 
       // ---- Create Post Record ----
-      const newPost = await Post.create({
+      const newPost = await Posts.create({
         user_id,
         farmer,
         location,

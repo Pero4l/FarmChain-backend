@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     farmSize: DataTypes.STRING,
     content: DataTypes.TEXT,
     images: DataTypes.JSON,
-    video: DataTypes.JSON,
+    videos: DataTypes.JSON,
     likes: DataTypes.INTEGER,
     comments: DataTypes.INTEGER,
     shares: DataTypes.INTEGER,
