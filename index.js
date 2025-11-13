@@ -2,7 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const app = express();
 app.use(express.json());
-import cors from 'cors';
+const cors = require('cors');
 app.use(cors({ origin: '*' })); // Or restrict to your frontend URL
 
 
