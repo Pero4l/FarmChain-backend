@@ -2,6 +2,9 @@ const express = require("express");
 require("dotenv").config();
 const app = express();
 app.use(express.json());
+import cors from 'cors';
+app.use(cors({ origin: '*' })); // Or restrict to your frontend URL
+
 
 const userAuth = require("./router/user.route");
 const post = require("./router/post.route");
