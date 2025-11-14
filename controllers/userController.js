@@ -99,19 +99,23 @@ async function login(req, res) {
     { expiresIn: "24h" }
   );
 
-  const userId = req.data.id;
-  const currentUser = `${req.data.first_name} ${req.data.last_name}`;
-  const location = `${req.data.state}, ${req.data.country}`;
+  // const userId = req.data.id;
+  // const currentUser = `${req.data.first_name} ${req.data.last_name}`;
+  // const location = `${req.data.state}, ${req.data.country}`;
   // const verified = req.data.verified
+
+  const user = { 
+   userId: req.data.id,
+   currentUser: `${req.data.first_name} ${req.data.last_name}`,
+   location: `${req.data.state}, ${req.data.country}`
+  }
 
   if (req.user) {
     return res.status(200).json({
       success: true,
       message: "Login Successfully",
       token: token,
-      userId: userId,
-      currentUser: currentUser,
-      location: location,
+      user: user
     });
   }
 }

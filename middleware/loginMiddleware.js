@@ -8,7 +8,7 @@ async function loginMiddleware(req, res, next) {
   if (!user || !password) {
     return res.status(400).json({
       success: false,
-      message: "Either email or phone number must be provided",
+      message: "Either email or phone number and password is required",
     });
   }
 
