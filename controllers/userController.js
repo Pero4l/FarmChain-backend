@@ -1,3 +1,4 @@
+const { or } = require("sequelize");
 const { Users } = require("../models");
 const {Notifications} = require("../models")
 const { Profile } = require('../models');
@@ -79,10 +80,18 @@ async function register(req, res) {
 
 
     // HANDLE PROFILE CREATION
-    const userProfile = await Users.findOne({ where: { email } });
-    if (userProfile) {
+    const user = await Users.findOne({ where: { email } });
+    if (user) {
+
       await Profile.create({
-        user_id: userProfile.id
+        user_id: user.id,
+        bio: 'Excited to be part of the FarmChain community, let connect and grow together!',
+        organization: '',
+        avatar: '',
+        cover_avatar: '',
+        location: '',
+        verified: false,
+        share_account: ''
       });
     }
     

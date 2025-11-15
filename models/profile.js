@@ -17,9 +17,9 @@ module.exports = (sequelize, DataTypes) => {
   profile.init({
     user_id: DataTypes.INTEGER,
     bio: DataTypes.STRING,
+    organization: DataTypes.STRING,
     avatar: DataTypes.STRING,
     cover_avatar: DataTypes.STRING,
-    organization: DataTypes.STRING,
     location: DataTypes.STRING,
     verified: DataTypes.BOOLEAN,
     share_account: DataTypes.STRING
