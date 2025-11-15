@@ -3,3 +3,4 @@ npx sequelize-cli model:generate --name notifications --attributes user_id:integ
 npx sequelize-cli db:migrate
 
 npx sequelize-cli model:generate --name posts --attributes farmer:string,location:string,avatar:string,time:string,verified:boolean,farmSize:string,content:text,images:json,video:json,likes:integer,comments:integer,shares:integer,type:string,tags:json,category:string
+

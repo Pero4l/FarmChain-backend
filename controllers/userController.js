@@ -110,6 +110,8 @@ async function login(req, res) {
    location: `${req.data.state}, ${req.data.country}`
   }
 
+  
+
   if (req.user) {
     return res.status(200).json({
       success: true,
@@ -118,6 +120,11 @@ async function login(req, res) {
       user: user
     });
   }
+
+  const data = res.json();
+
+  console.log(data," <<<< THIS IS THE RESPONSE DATA FROM LOGIN CONTROLLER");
+
 }
 
 // Get all users
