@@ -89,7 +89,7 @@ async function register(req, res) {
         organization: '',
         avatar: '',
         cover_avatar: '',
-        location: '',
+        location: user.location,
         verified: false,
         share_account: ''
       });
