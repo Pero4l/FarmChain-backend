@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const{register, login} = require('../controllers/userController')
-const { getAllUsers, getUserById } = require('../controllers/userController')
+const { getAllUsers, getUserById } = require('../controllers/userProfileController')
 const{loginMiddleware} = require('../middleware/loginMiddleware')
 const { authMiddleware } = require('../middleware/authUserMiddleware')
 

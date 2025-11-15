@@ -30,6 +30,11 @@ module.exports = {
       location: {
         type: Sequelize.STRING
       },
+       verified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+        
+      },
       share_account: {
         type: Sequelize.STRING
       },

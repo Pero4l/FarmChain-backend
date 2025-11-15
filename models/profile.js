@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     cover_avatar: DataTypes.STRING,
     organization: DataTypes.STRING,
     location: DataTypes.STRING,
+    verified: DataTypes.BOOLEAN,
     share_account: DataTypes.STRING
   }, {
     sequelize,

@@ -1,5 +1,6 @@
 const { Users } = require("../models");
 const {Notifications} = require("../models")
+const { Profile } = require('../models');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -51,6 +52,7 @@ async function register(req, res) {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
+
     await Users.create({
       first_name,
       last_name,
@@ -63,7 +65,8 @@ async function register(req, res) {
       password: hashedPassword,
     });
 
-       // HANDLE NOTIFICATION
+
+    // HANDLE NOTIFICATION
     const isUser = await Users.findOne({ where: { email } });
     if (isUser) {
 
@@ -73,6 +76,10 @@ async function register(req, res) {
       })
       
     }
+
+
+   
+    
 
     return res.status(201).json({
       success: true,
@@ -126,36 +133,7 @@ async function login(req, res) {
 
 }
 
-// Get all users
-const getAllUsers = async (req, res) => {
-  try {
-    const allUsers = await Users.findAll({
-      attributes: {
-        exclude: ["password"],
-      },
-    });
-    res.status(200).json(allUsers);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// Get single user by ID
-const getUserById = async (req, res) => {
-  try {
-    const user = await Users.findByPk(req.params.id,{
-      attributes:{
-        exclude: ['password']
-      }
-    });
-
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.status(200).json(user);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
 
 
-module.exports = { register, login, getAllUsers, getUserById };
+module.exports = { register, login };
 
