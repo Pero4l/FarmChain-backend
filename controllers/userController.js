@@ -156,5 +156,6 @@ const getUserById = async (req, res) => {
   }
 };
 
+
 module.exports = { register, login, getAllUsers, getUserById };
 

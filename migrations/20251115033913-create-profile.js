@@ -13,7 +13,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       bio: {
-        type: Sequelize.STRING(170)
+        type: Sequelize.STRING(170),
+        defaultValue: 'Excited to be part of the FarmChain community, let connect and grow together!'
       },
       avatar: {
         type: Sequelize.STRING,
