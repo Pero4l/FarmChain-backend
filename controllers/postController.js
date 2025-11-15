@@ -99,7 +99,7 @@ async function newsFeedPost(req, res) {
         farmSize,
         content,
         images: uploadedImages.map((i) => i.secure_url),
-        video: uploadedVideos.map((v) => v.secure_url),
+        videos: uploadedVideos.map((v) => v.secure_url),
         likes: 0,
         comments: 0,
         shares: 0,

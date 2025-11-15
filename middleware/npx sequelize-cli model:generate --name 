@@ -4,3 +4,5 @@ npx sequelize-cli db:migrate
 
 npx sequelize-cli model:generate --name posts --attributes farmer:string,location:string,avatar:string,time:string,verified:boolean,farmSize:string,content:text,images:json,video:json,likes:integer,comments:integer,shares:integer,type:string,tags:json,category:string
 
+
+npx sequelize-cli model:generate --name profile --attributes user_id:integer, bio:string, avatar:string, cover_avatar:string, organization:string, location:string, share_accout:string

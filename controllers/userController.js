@@ -94,6 +94,7 @@ async function login(req, res) {
       userId: req.data.id,
       currentUser: `${req.data.first_name} ${req.data.last_name}`,
       location: `${req.data.state}, ${req.data.country}`,
+      email: req.data.email
     },
     process.env.JWT_SECRET,
     { expiresIn: "24h" }
@@ -107,7 +108,8 @@ async function login(req, res) {
   const user = { 
    userId: req.data.id,
    currentUser: `${req.data.first_name} ${req.data.last_name}`,
-   location: `${req.data.state}, ${req.data.country}`
+   location: `${req.data.state}, ${req.data.country}`,
+   email: req.data.email
   }
 
   
@@ -121,9 +123,6 @@ async function login(req, res) {
     });
   }
 
-  const data = res.json();
-
-  console.log(data," <<<< THIS IS THE RESPONSE DATA FROM LOGIN CONTROLLER");
 
 }
 
