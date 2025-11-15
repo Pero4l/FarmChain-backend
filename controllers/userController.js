@@ -80,6 +80,9 @@ async function register(req, res) {
 
 
     // HANDLE PROFILE CREATION
+
+    let location =  `${state},${country}`
+    
     const user = await Users.findOne({ where: { email } });
     if (user) {
 
@@ -89,7 +92,7 @@ async function register(req, res) {
         organization: '',
         avatar: '',
         cover_avatar: '',
-        location: user.location,
+        location: location,
         verified: false,
         share_account: ''
       });
