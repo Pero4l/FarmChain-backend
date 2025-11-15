@@ -78,7 +78,13 @@ async function register(req, res) {
     }
 
 
-   
+    // HANDLE PROFILE CREATION
+    const userProfile = await Users.findOne({ where: { email } });
+    if (userProfile) {
+      await Profile.create({
+        user_id: userProfile.id
+      });
+    }
     
 
     return res.status(201).json({
