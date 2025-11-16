@@ -80,21 +80,17 @@ async function register(req, res) {
 
 
     // HANDLE PROFILE CREATION
-
-    let location =  `${state},${country}`
-    
+    let location =  `${state}, ${country}`
+    let share = `main/${phone_no}`
     const user = await Users.findOne({ where: { email } });
     if (user) {
 
       await Profile.create({
-        user_id: user.id,
-        bio: 'Excited to be part of the FarmChain community, let connect and grow together!',
+        user_id: user.id, bio: null || 'Excited to be part of the FarmChain community, let connect and grow together!',
         organization: '',
-        avatar: '',
-        cover_avatar: '',
         location: location,
         verified: false,
-        share_account: ''
+        share_account: share,
       });
     }
     
