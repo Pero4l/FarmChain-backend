@@ -52,7 +52,7 @@ const getUserById = async (req, res) => {
     ],
     });
 
-    const UserProfile = {
+    const userProfile = {
       name: `${user.first_name} ${user.last_name}`,
       cover_avatar: profile.cover_avatar,
       avatar: profile.avatar,
@@ -65,7 +65,7 @@ const getUserById = async (req, res) => {
     }
 
     if (!user) return res.status(404).json({ message: "User not found" });
-    res.status(200).json(user);
+    res.status(200).json(userProfile);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
