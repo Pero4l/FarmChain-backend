@@ -1,5 +1,6 @@
-const { Posts, Users, Notifications } = require("../models");
+const { Posts, Users, Notifications, Profile } = require("../models");
 const multer = require("multer");
+const { where } = require("sequelize");
 const cloudinary = require("cloudinary").v2;
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
@@ -50,11 +51,25 @@ async function newsFeedPost(req, res) {
         return res.status(400).json({ success: false, message: err.message });
       }
 
-      const { avatar, verified, farmSize, content, tags, category } = req.body;
+
+      const {content, farmSize, tags, category } = req.body;
+
+       // Getting some info from Profile
+      const profile = await Profile.findOne({
+        attributes: [
+          "avatar",
+          "verified"
+        ],
+        where: user_id = user_id} );
+
       const user = req.user;
       const user_id = user.userId;
       const farmer = user.currentUser;
       const location = user.location;
+      const avatar = profile.avatar
+      const verified = profile.verified
+
+     
 
       // if (!content) {
       //   return res.status(400).json({ success: false, message: "Content is required" });
@@ -89,13 +104,14 @@ async function newsFeedPost(req, res) {
         Promise.all(videos.map((vid) => uploadToCloudinary(vid.buffer, "posts/videos", "video"))),
       ]);
 
+
       // ---- Create Post Record ----
       const newPost = await Posts.create({
         user_id,
         farmer,
         location,
-        avatar,
-        verified: verified === "true" || verified === true,
+        avatar: avatar,
+        verified: verified,
         farmSize,
         content,
         images: uploadedImages.map((i) => i.secure_url),
