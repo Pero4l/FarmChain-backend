@@ -1,4 +1,4 @@
-const { where } = require('sequelize');
+const { where, and } = require('sequelize');
 const { Users } = require('../models');
 const { Profile } = require('../models');
 const {Relationship} = require('../models');
@@ -6,17 +6,41 @@ const {Relationship} = require('../models');
 
 // Get single user by ID
 const getUserById = async (req, res) => {
+  const {id} = req.params.id
   try {
   // user sharing
       const userSharing = req.user;
       const user_id = userSharing.userId;
 
       // Checking relationship
-      const relationship = await Relationship.findOne({where: follower_id = user_id})
+     const relationship = await Relationship.findOne({
+      where: {
+        follower_id: user_id,
+        followed_id: id
+      }
+    });
+    // Return boolean
+    const isFollowing = relationship.following
+
+    // Count followers
+    const followers = await Relationship.count({
+    where: followed_id = id
+    });
+
+    const following = await Relationship.count({
+    where: followed_id = user_id
+    });
+
+
+    // Get user profile
+    const profile = await Profile.findOne({
+      where: id = id
+    })
 
 
 
-    const user = await Users.findByPk(req.params.id,{
+
+    const user = await Users.findByPk(id,{
       attributes: [
       "id",
       "first_name",
