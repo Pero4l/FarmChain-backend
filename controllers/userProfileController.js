@@ -31,7 +31,8 @@ const getUserById = async (req, res) => {
     where:{ follower_id: id}
     });
 
-    
+
+
 
     // Get user profile
     const profile = await Profile.findOne({
@@ -53,6 +54,13 @@ const getUserById = async (req, res) => {
 
     const UserProfile = {
       name: `${user.first_name} ${user.last_name}`,
+      cover_avatar: profile.cover_avatar,
+      avatar: profile.avatar,
+      bio: profile.bio,
+      followers: followers,
+      following: following,
+      relate: isFollowing
+      
 
     }
 
