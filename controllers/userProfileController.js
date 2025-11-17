@@ -28,9 +28,10 @@ const getUserById = async (req, res) => {
     });
     // Count following
     const following = await Relationship.count({
-    where:{ followed_id: id}
+    where:{ follower_id: id}
     });
 
+    
 
     // Get user profile
     const profile = await Profile.findOne({
