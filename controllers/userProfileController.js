@@ -57,11 +57,11 @@ const getUserById = async (req, res) => {
       cover_avatar: profile.cover_avatar,
       avatar: profile.avatar,
       bio: profile.bio,
+      organization:profile.organization,
       followers: followers,
       following: following,
       relate: isFollowing
       
-
     }
 
     if (!user) return res.status(404).json({ message: "User not found" });
