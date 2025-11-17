@@ -9,12 +9,30 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
-      Users.hasMany(models.Notifications, {foreignKey: 'user_id'});
-      Users.hasMany(models.Posts, {foreignKey: 'user_id'})
-      Users.hasOne(models.Profile, {foreignKey: 'user_id'})
-    }
+  static associate(models) {
+
+  // Existing associations
+  Users.hasMany(models.Notifications, { foreignKey: 'user_id' });
+  Users.hasMany(models.Posts, { foreignKey: 'user_id' });
+  Users.hasOne(models.Profile, { foreignKey: 'user_id' });
+
+  // 🔥 Followers (users that follow THIS user)
+  Users.belongsToMany(models.Users, {
+    through: models.Relationship,
+    foreignKey: "followed_id",
+    otherKey: "follower_id",
+    as: "followers"
+  });
+
+  // 🔥 Following (users THIS user is following)
+  Users.belongsToMany(models.Users, {
+    through: models.Relationship,
+    foreignKey: "follower_id",
+    otherKey: "followed_id",
+    as: "following"
+  });
+}
+
   }
   Users.init({
     first_name: DataTypes.STRING,

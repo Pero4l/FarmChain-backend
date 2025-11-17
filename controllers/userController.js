@@ -86,7 +86,8 @@ async function register(req, res) {
     if (user) {
 
       await Profile.create({
-        user_id: user.id, bio: null || 'Excited to be part of the FarmChain community, let connect and grow together!',
+        user_id: user.id, 
+        bio: null || 'Excited to be part of the FarmChain community, let connect and grow together!',
         organization: '',
         location: location,
         verified: false,
@@ -110,6 +111,7 @@ async function register(req, res) {
 }
 
 async function login(req, res) {
+  
   const token = jwt.sign(
     {
       userId: req.data.id,
