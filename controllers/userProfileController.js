@@ -24,11 +24,11 @@ const getUserById = async (req, res) => {
 
     // Count followers
     const followers = await Relationship.count({
-    where: followed_id = id
+    where: {followed_id: id}
     });
-
+    // Count following
     const following = await Relationship.count({
-    where: followed_id = user_id
+    where:{ followed_id: id}
     });
 
 
