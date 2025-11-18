@@ -1,4 +1,3 @@
-const { or } = require("sequelize");
 const { Users } = require("../models");
 const {Notifications} = require("../models")
 const { Profile } = require('../models');
@@ -110,6 +109,7 @@ async function register(req, res) {
   }
 }
 
+
 async function login(req, res) {
   
   const token = jwt.sign(
@@ -135,14 +135,32 @@ async function login(req, res) {
    email: req.data.email
   }
 
-  
+
+    // Get user profile
+    const profile = await Profile.findOne({
+  attributes: ['avatar', 'cover_avatar', 'bio', 'organization', 'location', 'verified', 'share_account'],
+  where: { user_id: user.userId }
+});
+
+const personalProfile = {
+  name: user.currentUser,
+  location: profile?.location || "",
+  avatar: profile?.avatar || null,
+  cover_avatar: profile?.cover_avatar || null,
+  bio: profile?.bio || "",
+  organization: profile?.organization || "",
+  verified: profile?.verified || false,
+  share_account: profile?.share_account || ""
+};
+
 
   if (req.user) {
     return res.status(200).json({
       success: true,
       message: "Login Successfully",
       token: token,
-      user: user
+      user: user,
+      profile: personalProfile
     });
   }
 
