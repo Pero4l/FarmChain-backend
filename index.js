@@ -8,7 +8,7 @@ app.use(cors({ origin: '*' })); // Or restrict to your frontend URL
 
 const userAuth = require("./router/user.route");
 const post = require("./router/post.route");
-const ai = require("./router/ai.route")
+// const ai = require("./router/ai.route")
 
 const db = require("./config/db");
 
@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 app.use("/auth", userAuth);
 app.use("/post", post);
 app.use("/user", userAuth);
-app.use("/ai", ai);
+// app.use("/ai", ai);
 
 const PORT = process.env.PORT || 3001;
 
