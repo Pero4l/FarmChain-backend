@@ -8,7 +8,7 @@ async function loginMiddleware(req, res, next) {
   if (!user || !password) {
     return res.status(400).json({
       success: false,
-      message: "Either email or phone number and password is required",
+      message: "Email or phone number and password is required",
     });
   }
 
@@ -20,6 +20,7 @@ async function loginMiddleware(req, res, next) {
       "last_name",
       "state",
       "country",
+      "email",
     ],
     where: { [Op.or]: [{ email: user }, { phone_no: user }] },
   });
@@ -35,7 +36,7 @@ async function loginMiddleware(req, res, next) {
   if (!passMatch) {
     return res.status(401).json({
       success: false,
-      message: "Invalid credentials",
+      message: "Wrong email/number or password",
     });
   }
 

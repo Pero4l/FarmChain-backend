@@ -118,7 +118,7 @@ async function login(req, res) {
       userId: req.data.id,
       currentUser: `${req.data.first_name} ${req.data.last_name}`,
       location: `${req.data.state}, ${req.data.country}`,
-      email: req.data.email
+      email: `${req.data.email}`
     },
     process.env.JWT_SECRET,
     { expiresIn: "24h" }
@@ -133,7 +133,7 @@ async function login(req, res) {
    userId: req.data.id,
    currentUser: `${req.data.first_name} ${req.data.last_name}`,
    location: `${req.data.state}, ${req.data.country}`,
-   email: req.data.email
+   email: `${req.data.email}`
   }
 
 
