@@ -1,5 +1,6 @@
 const { Users } = require("../models");
 const {Notifications} = require("../models")
+const { Relationship } = require("../models");
 const { Profile } = require('../models');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -142,6 +143,15 @@ async function login(req, res) {
   where: { user_id: user.userId }
 });
 
+  // Get followers/following counts
+    const followers = await Relationship.count({
+      where: { followed_id: user.userId }
+    });
+    const following = await Relationship.count({
+      where: { follower_id: user.userId }
+    });
+
+
 const personalProfile = {
   name: user.currentUser,
   location: profile?.location || "",
@@ -150,6 +160,8 @@ const personalProfile = {
   bio: profile?.bio || "",
   organization: profile?.organization || "",
   verified: profile?.verified || false,
+  followers: followers || 0,
+  following: following || 0,
   share_account: profile?.share_account || ""
 };
 
