@@ -60,7 +60,7 @@ const getUserById = async (req, res) => {
       organization:profile.organization,
       followers: followers,
       following: following,
-      relate: isFollowing
+      isfollwed: isFollowing
       
     }
 
@@ -98,4 +98,4 @@ const getAllUsers = async (req, res) => {
 
 
 
-module.exports = { getAllUsers, getUserById, UserProfile };
+module.exports = { getAllUsers, getUserById, };
