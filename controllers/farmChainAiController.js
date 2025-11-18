@@ -2,7 +2,7 @@ const OpenAI = require('openai');
 require("dotenv").config();
 
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY
 });
 
 async function aiHandler(req, res) {
