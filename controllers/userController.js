@@ -128,19 +128,23 @@ async function login(req, res) {
   // const location = `${req.data.state}, ${req.data.country}`;
   // const verified = req.data.verified
 
-  const user = { 
-   userId: req.data.id,
-   currentUser: `${req.data.first_name} ${req.data.last_name}`,
-   location: `${req.data.state}, ${req.data.country}`,
-   email: req.data.email
-  }
 
-
-    // Get user profile
+      // Get user profile
     const profile = await Profile.findOne({
   attributes: ['avatar', 'cover_avatar', 'bio', 'organization', 'location', 'verified', 'share_account'],
   where: { user_id: user.userId }
 });
+
+  const user = { 
+   userId: req.data.id,
+   currentUser: `${req.data.first_name} ${req.data.last_name}`,
+   location: `${req.data.state}, ${req.data.country}`,
+   email: req.data.email,
+   avatarUrl: profile?.avatar || null
+  }
+
+
+
 
 const personalProfile = {
   name: user.currentUser,
