@@ -189,10 +189,12 @@ const getUserById = async (req, res) => {
     res.status(200).json({
       id: user.id,
       name: `${user.first_name} ${user.last_name}`,
+      location: `${user.state}, ${user.country}`,
       avatar: profile?.avatar || null,
       cover_avatar: profile?.cover_avatar || null,
       bio: profile?.bio || "",
       organization: profile?.organization || "",
+      verified: profile?.verified,
       followers,
       following,
       isFollowed

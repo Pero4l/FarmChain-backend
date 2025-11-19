@@ -88,7 +88,7 @@ async function register(req, res) {
       await Profile.create({
         user_id: user.id, 
         bio: null || 'Excited to be part of the FarmChain community, let connect and grow together!',
-        organization: '',
+        organization: 'eg FarmChain',
         location: location,
         verified: false,
         share_account: share,
