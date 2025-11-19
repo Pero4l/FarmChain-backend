@@ -8,6 +8,7 @@ require("dotenv").config();
 
 async function register(req, res) {
   try {
+    
     const {
       first_name,
       last_name,

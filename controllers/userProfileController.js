@@ -208,8 +208,8 @@ const getUserById = async (req, res) => {
 // Toggle follow/unfollow a user
 const followUser = async (req, res) => {
   try {
-    const followerId = req.user.userId; // logged-in user
-    const followedId = req.body.followed_id; // user to follow/unfollow
+    const followerId = req.user.userId;
+    const followedId = req.body.followed_id;
 
     if (!followedId) {
       return res.status(400).json({ error: "followed_id is required" });
@@ -225,32 +225,36 @@ const followUser = async (req, res) => {
     });
 
     if (relationship) {
-      // Toggle following status
-      relationship.following = !relationship.following;
-      await relationship.save();
-    } else {
-      // Create new relationship
-      relationship = await Relationship.create({
-        follower_id: followerId,
-        followed_id: followedId,
-        following: true
+      // UNFOLLOW → delete row
+      await relationship.destroy();
+
+      const followersCount = await Relationship.count({
+        where: { followed_id: followedId }
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: "Unfollowed successfully",
+        following: false,
+        followersCount
       });
     }
 
-    // Count updated followers and following
-    const followersCount = await Relationship.count({
-      where: { followed_id: followedId, following: true }
+    // FOLLOW → create row
+    relationship = await Relationship.create({
+      follower_id: followerId,
+      followed_id: followedId
     });
-    const followingCount = await Relationship.count({
-      where: { follower_id: followedId, following: true }
+
+    const followersCount = await Relationship.count({
+      where: { followed_id: followedId }
     });
 
     return res.status(200).json({
       success: true,
-      message: relationship.following ? "Followed successfully" : "Unfollowed successfully",
-      following: relationship.following,
-      followersCount,
-      followingCount
+      message: "Followed successfully",
+      following: true,
+      followersCount
     });
 
   } catch (err) {
@@ -258,6 +262,7 @@ const followUser = async (req, res) => {
     return res.status(500).json({ error: "Something went wrong" });
   }
 };
+
 
 
 
