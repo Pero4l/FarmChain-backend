@@ -243,7 +243,8 @@ const followUser = async (req, res) => {
     // FOLLOW → create row
     relationship = await Relationship.create({
       follower_id: followerId,
-      followed_id: followedId
+      followed_id: followedId,
+      following: true
     });
 
     const followersCount = await Relationship.count({
