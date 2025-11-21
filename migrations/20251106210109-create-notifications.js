@@ -13,8 +13,15 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      type: {
+        type: Sequelize.STRING
+      },
       notification: {
         type: Sequelize.STRING
+      },
+      is_read: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,

@@ -150,7 +150,8 @@
 
 
 
-const { Users, Profile, Relationship } = require('../models');
+const { Users, Profile, Relationship, Notification } = require('../models');
+const notifications = require('../models/notifications');
 
 // Get single user by ID
 const getUserById = async (req, res) => {
@@ -251,12 +252,21 @@ const followUser = async (req, res) => {
       where: { followed_id: followedId }
     });
 
+    // Create notification for the followed user
+    const notification = await Notification.create({
+      user_id: followedId,
+      type: 'social',
+      notification: `User ${followerId} has followed you.`,
+      is_read: false
+    })
+
     return res.status(200).json({
       success: true,
       message: "Followed successfully",
       following: true,
       followersCount
     });
+
 
   } catch (err) {
     console.error(err);
