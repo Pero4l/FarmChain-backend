@@ -1,12 +1,27 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
+const { authMiddleware } = require("../middleware/authUserMiddleware");
+const { newsFeedPost } = require("../controllers/postController");
+const multer = require("multer");
 
-const {authMiddleware} = require('../middleware/authUserMiddleware')
-const {newsFeedPost, getAllPost} = require('../controllers/postController')
+// Multer memory storage
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith("image/") || file.mimetype.startsWith("video/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only image and video files are allowed"));
+    }
+  },
+}).fields([
+  { name: "images", maxCount: 10 },
+  { name: "videos", maxCount: 4 },
+]);
 
-router.post('/create', authMiddleware, newsFeedPost)
-// router.get('/', authMiddleware, getAllPost) // remove for now
+// Routes
+router.post("/create", authMiddleware, upload, newsFeedPost);
 
-// router.get('/', authMiddleware, getAllPost)
-
-module.exports = router
+module.exports = router;
