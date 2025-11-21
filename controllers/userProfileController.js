@@ -253,10 +253,15 @@ const followUser = async (req, res) => {
     });
 
     // Create notification for the followed user
+
+    const user = await Users.findOne(followerId, {
+      attributes: ["first_name", "last_name"],
+    });
+    
     const notification = await Notification.create({
       user_id: followedId,
       type: 'social',
-      notification: `User ${followerId} has followed you.`,
+      notification: `${user.first_name} ${user.last_name} started following you.`,
       is_read: false
     })
 
