@@ -251,13 +251,13 @@ const followUser = async (req, res) => {
     const followersCount = await Relationship.count({
       where: { followed_id: followedId }
     });
+    
 
     // Create notification for the followed user
-
     const user = await Users.findOne(followerId, {
       attributes: ["first_name", "last_name"],
     });
-    
+
     const notification = await Notification.create({
       user_id: followedId,
       type: 'social',
