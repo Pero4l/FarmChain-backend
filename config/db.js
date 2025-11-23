@@ -8,7 +8,6 @@
 // })
 // module.exports = connection;
 
-
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
