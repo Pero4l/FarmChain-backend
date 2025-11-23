@@ -124,4 +124,24 @@ async function newsFeedPost(req, res) {
   }
 }
 
-module.exports = { newsFeedPost };
+
+async function getAllPosts(req, res) {
+  try {
+    const posts = await Posts.findAll({
+      // exclude: ['updatedAt'],
+      order: [['createdAt', 'DESC']],
+    });
+    return res.status(200).json({
+      success: true,
+      posts,
+    });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+}
+
+module.exports = { newsFeedPost, getAllPosts };
