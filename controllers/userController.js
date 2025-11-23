@@ -75,7 +75,7 @@ async function register(req, res) {
       await Notifications.create({
         user_id: isUser.id,
         type: 'account',
-        notification: `Welcome ${isUser.first_name} to FarmChain! Your account has been successfully created.`,
+        notification: `Welcome to FarmChain ${isUser.first_name} ${isUser.last_name}! Your account has been successfully created.`,
         is_read: false
       })
       
