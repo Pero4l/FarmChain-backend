@@ -1,7 +1,4 @@
-const { Users } = require("../models");
-const {Notifications} = require("../models")
-const { Relationship } = require("../models");
-const { Profile } = require('../models');
+const { Users, Posts, Notifications, Relationship, Profile } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -168,6 +165,18 @@ const personalProfile = {
   share_account: profile?.share_account || ""
 };
 
+ // User posts count
+    const postsCount = await Posts.count({
+      where: { user_id: user.userId }
+    });
+
+    const posts = await Posts.findAll({
+      where: { user_id: user.userId },
+      // attributes: ['id', 'content', 'createdAt'],
+      order: [['createdAt', 'DESC']]
+    });
+
+
 
   if (req.user) {
     return res.status(200).json({
@@ -175,7 +184,9 @@ const personalProfile = {
       message: "Login Successfully",
       token: token,
       user: user,
-      profile: personalProfile
+      profile: personalProfile,
+      posts,
+      postsCount
     });
   }
 
