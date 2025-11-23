@@ -186,6 +186,17 @@ const getUserById = async (req, res) => {
       where: { follower_id: id, following: true }
     });
 
+    // User posts count
+    const postsCount = await Posts.count({
+      where: { user_id: id }
+    });
+
+    const posts = await Posts.findAll({
+      where: { user_id: id },
+      // attributes: ['id', 'content', 'createdAt'],
+      order: [['createdAt', 'DESC']]
+    });
+
     res.status(200).json({
       id: user.id,
       name: `${user.first_name} ${user.last_name}`,
@@ -197,7 +208,9 @@ const getUserById = async (req, res) => {
       verified: profile?.verified,
       followers,
       following,
-      isFollowed
+      isFollowed,
+      postsCount,
+      posts
     });
 
   } catch (err) {
