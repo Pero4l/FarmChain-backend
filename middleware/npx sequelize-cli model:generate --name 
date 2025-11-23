@@ -8,3 +8,5 @@ npx sequelize-cli model:generate --name posts --attributes farmer:string,locatio
 npx sequelize-cli model:generate --name profile --attributes user_id:integer,bio:string,avatar:string,cover_avatar:string,organization:string,location:string,share_accout:string
 
 npx sequelize-cli model:generate --name relationships --attributes follower_id:integer,followed_id:integer,
+
+npx sequelize-cli model:generate --name comments --attributes user_id:integer,post_id:integer,comment:integer

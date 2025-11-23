@@ -150,8 +150,7 @@
 
 
 
-const { Users, Profile, Relationship, Notification } = require('../models');
-const notifications = require('../models/notifications');
+const { Users, Profile, Relationship, Notification, Posts } = require('../models');
 
 // Get single user by ID
 const getUserById = async (req, res) => {
