@@ -152,20 +152,7 @@ async function login(req, res) {
     });
 
 
-const personalProfile = {
-  name: user.currentUser,
-  location: profile?.location || "",
-  avatar: profile?.avatar || null,
-  cover_avatar: profile?.cover_avatar || null,
-  bio: profile?.bio || "",
-  organization: profile?.organization || "",
-  verified: profile?.verified || false,
-  followers: followers || 0,
-  following: following || 0,
-  share_account: profile?.share_account || ""
-};
-
- // User posts count
+     // User posts count
     const postsCount = await Posts.count({
       where: { user_id: user.userId }
     });
@@ -177,6 +164,22 @@ const personalProfile = {
     });
 
 
+const personalProfile = {
+  name: user.currentUser,
+  location: profile?.location || "",
+  avatar: profile?.avatar || null,
+  cover_avatar: profile?.cover_avatar || null,
+  bio: profile?.bio || "",
+  organization: profile?.organization || "",
+  verified: profile?.verified || false,
+  followers: followers || 0,
+  following: following || 0,
+  posts: posts,
+  totalPost: postsCount
+  // share_account: profile?.share_account || ""
+};
+
+
 
   if (req.user) {
     return res.status(200).json({
@@ -185,8 +188,6 @@ const personalProfile = {
       token: token,
       user: user,
       profile: personalProfile,
-      posts,
-      postsCount
     });
   }
 

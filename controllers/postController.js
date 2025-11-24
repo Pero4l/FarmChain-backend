@@ -144,6 +144,22 @@ async function getAllPosts(req, res) {
   }
 }
 
+async function  deletePost(req, res) {
+  const id = req.body.id;
+  try {
+    const post = await Posts.findOne({ where: { id: id } });
+    if (!post) {
+      return res.status(404).json({ success: false, message: "Post not found" });
+    }
+
+    await post.destroy();
+    return res.status(200).json({ success: true, message: "Post deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+}
 
 
-module.exports = { newsFeedPost, getAllPosts };
+
+module.exports = { newsFeedPost, getAllPosts, deletePost };

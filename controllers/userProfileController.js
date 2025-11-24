@@ -221,16 +221,12 @@ const getUserById = async (req, res) => {
 // Toggle follow/unfollow a user
 const followUser = async (req, res) => {
   try {
-    const followerId = req.user.userId;
-    const followedId = req.body.followed_id;
+    const followerId = req.user?.userId;
+    const followedId = req.body?.followed_id;
 
-    if (!followedId) {
-      return res.status(400).json({ error: "followed_id is required" });
-    }
-
-    if (followerId === followedId) {
-      return res.status(400).json({ error: "You cannot follow yourself" });
-    }
+    if (!followerId) return res.status(401).json({ error: "Unauthorized" });
+    if (!followedId) return res.status(400).json({ error: "followed_id is required" });
+    if (followerId === followedId) return res.status(400).json({ error: "You cannot follow yourself" });
 
     // Check if relationship exists
     let relationship = await Relationship.findOne({
@@ -241,9 +237,7 @@ const followUser = async (req, res) => {
       // UNFOLLOW → delete row
       await relationship.destroy();
 
-      const followersCount = await Relationship.count({
-        where: { followed_id: followedId }
-      });
+      const followersCount = await Relationship.count({ where: { followed_id: followedId } });
 
       return res.status(200).json({
         success: true,
@@ -254,28 +248,35 @@ const followUser = async (req, res) => {
     }
 
     // FOLLOW → create row
+    if (!Relationship) {
+      console.warn("Relationship model is undefined!");
+      return res.status(500).json({ error: "Relationship model is not available" });
+    }
+
     relationship = await Relationship.create({
       follower_id: followerId,
       followed_id: followedId,
       following: true
     });
 
-    const followersCount = await Relationship.count({
-      where: { followed_id: followedId }
-    });
+    const followersCount = await Relationship.count({ where: { followed_id: followedId } });
 
-    // Create notification for the followed user ONLY when a follow happens
-    const user = await Users.findByPk(followerId, {
-      attributes: ["first_name", "last_name"],
-    });
+    // Create notification safely
+    if (Notification) {
+      const user = await Users.findByPk(followerId, { attributes: ["first_name", "last_name"] });
 
-    if (user) {
-      await Notification.create({
-        user_id: followedId,
-        type: 'social',
-        notification: `${user.first_name} ${user.last_name} started following you.`,
-        is_read: false
-      });
+      if (user) {
+        await Notification.create({
+          user_id: followedId,
+          type: 'social',
+          notification: `${user.first_name} ${user.last_name} started following you.`,
+          is_read: false
+        });
+      } else {
+        console.warn(`Follower user not found for ID ${followerId}`);
+      }
+    } else {
+      console.warn("Notification model is undefined, skipping notification");
     }
 
     return res.status(200).json({
@@ -285,12 +286,15 @@ const followUser = async (req, res) => {
       followersCount
     });
 
-
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Something went wrong" });
+    console.error("❌ FollowUser Error:", err);
+    return res.status(500).json({
+      error: "Something went wrong",
+      details: err.message || err
+    });
   }
 };
+
 
 
 

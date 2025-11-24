@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { authMiddleware } = require("../middleware/authUserMiddleware");
-const { newsFeedPost, getAllPosts } = require("../controllers/postController");
+const { newsFeedPost, getAllPosts, deletePost } = require("../controllers/postController");
 const multer = require("multer");
 
 // MEMORY STORAGE — safest for Render/Vercel/etc
@@ -39,5 +39,6 @@ router.post(
 );
 
 router.get("/all", authMiddleware, getAllPosts);
+router.delete("/delete", authMiddleware, deletePost);
 
 module.exports = router;
