@@ -35,7 +35,7 @@ cloudinary.config({
     }
 
     // fetch profile
-    const profile = await Profile.findOne({ where: { userId } });
+    const profile = await Profile.findOne({ where: { user_id: userId } });
 
     if (!profile) return res.status(404).json({ message: "Profile not found" });
 
