@@ -10,7 +10,8 @@ cloudinary.config({
 
  const updateProfile = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const user = req.user;
+    const userId = user.userId;
 
     let avatarUrl = null;
     let coverUrl = null;
