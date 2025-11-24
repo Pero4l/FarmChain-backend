@@ -9,6 +9,8 @@ app.use(cors({ origin: '*' })); // Or restrict to your frontend URL
 const userAuth = require("./router/user.route");
 const post = require("./router/post.route");
 const ai = require("./router/ai.route")
+const updatedProfile = require("./router/profile.Routes");
+
 
 const db = require("./config/db");
 
@@ -23,6 +25,7 @@ app.use("/auth", userAuth);
 app.use("/post", post);
 app.use("/user", userAuth);
 app.use("/ai", ai);
+app.use("/profile", updatedProfile);
 
 const PORT = process.env.PORT || 3001;
 
@@ -38,3 +41,4 @@ db.sync({ force: false, alter: false })
   .catch((e) => {
     console.log(`❌ Database connection failed:`, e);
   });
+  

@@ -8,7 +8,7 @@ cloudinary.config({
 });
 
 
-exports.updateProfile = async (req, res) => {
+ const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -56,3 +56,6 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
+
+module.exports = { updateProfile };
