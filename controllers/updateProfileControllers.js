@@ -7,56 +7,62 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
 
- const updateProfile = async (req, res) => {
+const updateProfile = async (req, res) => {
   try {
-    const user = req.user;
-    const userId = user.userId;
+    const userId = req.user.userId;
 
-    let avatarUrl = null;
-    let coverUrl = null;
-
-    // upload avatar
-    if (req.files?.avatar) {
-      const uploadAvatar = await cloudinary.uploader.upload(
-        req.files.avatar.tempFilePath,
-        { folder: "profile_avatars" }
-      );
-      avatarUrl = uploadAvatar.secure_url;
-    }
-
-    // upload cover photo
-    if (req.files?.cover_avatar) {
-      const uploadCover = await cloudinary.uploader.upload(
-        req.files.cover_avatar.tempFilePath,
-        { folder: "profile_covers" }
-      );
-      coverUrl = uploadCover.secure_url;
-    }
-
-    // fetch profile
     const profile = await Profile.findOne({ where: { user_id: userId } });
-
     if (!profile) return res.status(404).json({ message: "Profile not found" });
 
-    // update fields
-    profile.bio = req.body.bio;
-    profile.organization = req.body.organization;
+    // ================= UPLOAD AVATAR =================
+    if (req.files?.avatar) {
+      if (!ALLOWED_TYPES.includes(req.files.avatar.mimetype)) {
+        return res.status(400).json({
+          message: "Invalid avatar format. Allowed: JPG, PNG, WEBP",
+        });
+      }
 
-    if (avatarUrl) profile.avatar = avatarUrl;
-    if (coverUrl) profile.cover_avatar = coverUrl;
+      const uploadedAvatar = await cloudinary.uploader.upload(
+        req.files.avatar.tempFilePath,
+        { folder: "profile_avatars", resource_type: "image" }
+      );
+      profile.avatar = uploadedAvatar.secure_url;
+    }
+
+    // ================= UPLOAD COVER =================
+    if (req.files?.cover_avatar) {
+      if (!ALLOWED_TYPES.includes(req.files.cover_avatar.mimetype)) {
+        return res.status(400).json({
+          message: "Invalid cover format. Allowed: JPG, PNG, WEBP",
+        });
+      }
+
+      const uploadedCover = await cloudinary.uploader.upload(
+        req.files.cover_avatar.tempFilePath,
+        { folder: "profile_covers", resource_type: "image" }
+      );
+      profile.cover_avatar = uploadedCover.secure_url;
+    }
+
+    // ================= UPDATE TEXT FIELDS =================
+    if (req.body.bio !== undefined) profile.bio = req.body.bio;
+    if (req.body.organization !== undefined) profile.organization = req.body.organization;
 
     await profile.save();
 
-    res.json({
+    return res.json({
       message: "Profile updated successfully",
       updatedProfile: profile,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error", error });
+    if (error.message.includes("File size limit")) {
+      return res.status(400).json({ message: "File too large. Max 5 MB." });
+    }
+    return res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
 
 module.exports = { updateProfile };
