@@ -75,12 +75,31 @@ async function newsFeedPost(req, res) {
   )
 );
 
-    // UPLOAD VIDEOS
-   const uploadedVideos = await Promise.all(
+  // ---- UPLOAD VIDEOS ----
+const uploadedVideos = await Promise.all(
   videos.map((vid) =>
-    uploadBufferToCloudinary(vid.buffer, vid.mimetype, "posts/videos")
+    new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "posts/videos",
+          resource_type: "video",
+          public_id: uuidv4(),
+        },
+        (error, result) => {
+          if (error) {
+            console.error("Video upload error:", error);
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+
+      stream.end(vid.buffer);
+    })
   )
 );
+
 
 
     // CREATE POST
