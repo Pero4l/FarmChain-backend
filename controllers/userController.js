@@ -143,26 +143,6 @@ async function login(req, res) {
   where: { user_id: user.userId }
 });
 
-  // Get followers/following counts
-    const followers = await Relationship.count({
-      where: { followed_id: user.userId }
-    });
-    const following = await Relationship.count({
-      where: { follower_id: user.userId }
-    });
-
-
-     // User posts count
-    const postsCount = await Posts.count({
-      where: { user_id: user.userId }
-    });
-
-    const posts = await Posts.findAll({
-      where: { user_id: user.userId },
-      // attributes: ['id', 'content', 'createdAt'],
-      order: [['createdAt', 'DESC']]
-    });
-
 
 const personalProfile = {
   name: user.currentUser,
@@ -172,10 +152,6 @@ const personalProfile = {
   bio: profile?.bio || "",
   organization: profile?.organization || "",
   verified: profile?.verified || false,
-  followers: followers || 0,
-  following: following || 0,
-  posts: posts,
-  totalPost: postsCount
   // share_account: profile?.share_account || ""
 };
 
