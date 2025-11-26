@@ -1,155 +1,3 @@
-// const { Users } = require('../models');
-// const { Profile } = require('../models');
-// const {Relationship} = require('../models');
-
-
-// // Get single user by ID
-// const getUserById = async (req, res) => {
-//   // Correctly get the ID from params
-//   const id = req.params.id;
-
-//   try {
-//     // user sharing
-//     const userSharing = req.user;
-//     const user_id = userSharing.userId;
-
-//     // Checking relationship
-//     const relationship = await Relationship.findOne({
-//       where: {
-//         follower_id: user_id,
-//         followed_id: id
-//       }
-//     });
-
-//     const isFollowing = relationship ? relationship.following : false;
-
-//     // Count followers
-//     const followers = await Relationship.count({
-//       where: { followed_id: id }
-//     });
-
-//     // Count following
-//     const following = await Relationship.count({
-//       where: { follower_id: id }
-//     });
-
-//     // Get user profile
-//     const profile = await Profile.findOne({
-//       where: { user_id: id }
-//     });
-
-//     console.log(profile);
-    
-//     // Get basic user info
-//     const user = await Users.findByPk(id, {
-//       attributes: ["id", "first_name", "last_name", "state", "country"],
-//     });
-
-//     if (!user) return res.status(404).json({ message: "User not found" });
-
-//     const userProfile = {
-//       name: `${user.first_name} ${user.last_name}`,
-//       cover_avatar: profile?.cover_avatar || null,
-//       avatar: profile?.avatar || null,
-//       bio: profile?.bio || "",
-//       organization: profile?.organization || "",
-//       followers: followers,
-//       following: following,
-//       isFollowed: isFollowing
-//     };
-
-//     res.status(200).json(userProfile);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-
-
-// const getUserById = async (req, res) => {
-//   const id = req.params.id;
-//   try {
-//     const currentUserId = req.user.userId;
-
-//     // Get user
-//     const user = await Users.findByPk(id, {
-//       attributes: ["id", "first_name", "last_name", "state", "country"],
-//     });
-//     if (!user) return res.status(404).json({ message: "User not found" });
-
-//     // Get profile
-//     const profile = await Profile.findOne({
-//       where: { user_id: id }
-//     });
-
-//     // Check if current user is following this profile
-//     const relationship = await Relationship.findOne({
-//       where: {
-//         follower_id: currentUserId,
-//         followed_id: id
-//       }
-//     });
-//     const isFollowed = relationship ? relationship.following : false;
-
-//     // Get followers/following counts
-//     const followers = await Relationship.count({
-//       where: { followed_id: id, following: true }
-//     });
-//     const following = await Relationship.count({
-//       where: { follower_id: id, following: true }
-//     });
-
-//     res.status(200).json({
-//       id: user.id,
-//       name: `${user.first_name} ${user.last_name}`,
-//       avatar: profile?.avatar || null,
-//       cover_avatar: profile?.cover_avatar || null,
-//       bio: profile?.bio || "",
-//       organization: profile?.organization || "",
-//       followers,
-//       following,
-//       isFollowed
-//     });
-
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-
-
-
-// Get all users
-// const getAllUsers = async (req, res) => {
-//   try {
-//     const allUsers = await Users.findAll({
-//       attributes: {
-//         exclude: ["password"],
-//       },
-//     });
-//     res.status(200).json(allUsers);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-
-
-
-// // User Profile by default 
-// async function UserProfile(req, res) {
-  
-// }
-
-
-
-
-// module.exports = { getAllUsers, getUserById, };
-
-
-
-
-
 const { Users, Profile, Relationship, Notification, Posts } = require('../models');
 
 // Get single user by ID
@@ -296,8 +144,43 @@ const followUser = async (req, res) => {
 };
 
 
+const getUserProfile = async (req, res) => {
+
+  const id = req.user?.userId
 
 
+    // Followers
+     const followers = await Relationship.count({
+      where: { followed_id: id }
+    });
+    const following = await Relationship.count({
+      where: { follower_id: id }
+    });
+
+      // User posts count
+    const postsCount = await Posts.count({
+      where: { user_id: id }
+    });
+
+    const posts = await Posts.findAll({
+      where: { user_id: id },
+      // attributes: ['id', 'content', 'createdAt'],
+      order: [['createdAt', 'DESC']]
+    });
+
+    const personalProfile = {
+      followers: followers,
+      following: following,
+      totalPost: postsCount,
+      posts: posts
+    }
+
+    res.status(200).json({
+      "message": "User profile retrived successfully",
+      "data": personalProfile
+    })
+
+}
 
 // Get all users
 
@@ -314,4 +197,4 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { getUserById, followUser, getAllUsers };
+module.exports = { getUserById, followUser, getAllUsers,getUserProfile };

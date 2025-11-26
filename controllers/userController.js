@@ -180,7 +180,6 @@ const personalProfile = {
 };
 
 
-
   if (req.user) {
     return res.status(200).json({
       success: true,
