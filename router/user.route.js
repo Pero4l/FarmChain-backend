@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { register, login } = require('../controllers/userController');
-const { getAllUsers, getUserById, followUser } = require('../controllers/userProfileController');
+const { getAllUsers, getUserById, followUser, getUserProfile } = require('../controllers/userProfileController');
 const { loginMiddleware } = require('../middleware/loginMiddleware');
 const { authMiddleware } = require('../middleware/authUserMiddleware');
 
@@ -15,6 +15,7 @@ router.post('/follow', authMiddleware, followUser);
 
 // User routes
 router.get('/all', authMiddleware, getAllUsers);
+router.get('/profile', authMiddleware, getUserProfile)
 router.get('/:id', authMiddleware, getUserById);
 
 module.exports = router;

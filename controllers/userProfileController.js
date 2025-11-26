@@ -183,7 +183,6 @@ const getUserProfile = async (req, res) => {
 }
 
 // Get all users
-
 const getAllUsers = async (req, res) => {
   try {
     const allUsers = await Users.findAll({
@@ -197,4 +196,4 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { getUserById, followUser, getAllUsers,getUserProfile };
+module.exports = { getUserById, followUser, getAllUsers, getUserProfile };

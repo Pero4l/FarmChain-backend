@@ -1,4 +1,4 @@
-const { Profile } = require("../models");
+const { Profile, Posts } = require("../models");
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
@@ -29,6 +29,12 @@ const updateProfile = async (req, res) => {
         { folder: "profile_avatars", resource_type: "image" }
       );
       profile.avatar = uploadedAvatar.secure_url;
+
+      const userPosts = await Posts.findAll({ where: { user_id: userId } });
+      for (const post of userPosts) {
+        post.avatar = uploadedAvatar.secure_url;
+        await post.save();
+      }
     }
 
     // ================= UPLOAD COVER =================
