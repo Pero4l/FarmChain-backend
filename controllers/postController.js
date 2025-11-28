@@ -178,7 +178,73 @@ async function  deletePost(req, res) {
 }
 
 async function postLike(req, res) {
-  
+  const { postId } = req.body;
+  const user = req.user
+  const userId = user.userId; 
+
+  try {
+    // 1. Check if post exists
+    const post = await Posts.findOne({ where: { id: postId } });
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    // 2. Check if user already liked this post
+    const existingLike = await Likes.findOne({
+      where: { postId, userId },
+    });
+
+    // ========== IF USER ALREADY LIKED (UNLIKE) ==========
+    if (existingLike) {
+      await existingLike.destroy();
+
+      post.likes = post.likes - 1;
+      await post.save();
+
+      return res.status(200).json({
+        success: true,
+        action: "unliked",
+        message: "Post unliked",
+        likes: post.likes,
+      });
+    }
+
+    // ========== IF USER HAS NOT LIKED (LIKE) ==========
+    await Likes.create({
+      postId,
+      userId,
+    });
+
+    post.likes = post.likes + 1;
+    await post.save();
+
+    // Create notification only if liking someone else's post
+    if (post.userId !== userId) {
+      await Notifications.create({
+      user_id: userId,
+      type: "like",
+      notification: `${user.first_name} ${user.last_name} liked your post`,
+      is_read: false,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      action: "liked",
+      message: "Post liked",
+      likes: post.likes,
+    });
+
+  } catch (error) {
+    console.error("LIKE ERROR:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
 }
 
 
