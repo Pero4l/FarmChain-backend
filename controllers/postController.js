@@ -222,11 +222,12 @@ async function postLike(req, res) {
     post.likes = post.likes + 1;
     await post.save();
 
+
     // Create notification only if liking someone else's post
     await Notifications.create({
       user_id: post.user_id,
       type: "like",
-      notification: `${user.first_name} ${user.last_name} liked your post`,
+      notification: `${user.currentUser} liked your post`,
       is_read: false,
       });
 
@@ -235,6 +236,7 @@ async function postLike(req, res) {
       action: "liked",
       message: "Post liked",
       likes: post.likes,
+      isLike: true
     });
 
   } catch (error) {
