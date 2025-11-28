@@ -10,3 +10,5 @@ npx sequelize-cli model:generate --name profile --attributes user_id:integer,bio
 npx sequelize-cli model:generate --name relationships --attributes follower_id:integer,followed_id:integer,
 
 npx sequelize-cli model:generate --name comments --attributes user_id:integer,post_id:integer,comment:integer
+
+npx sequelize-cli model:generate --name likes --attributes user_id:integer,post_id:integer,is_like:boolean

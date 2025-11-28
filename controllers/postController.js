@@ -1,4 +1,4 @@
-const { Posts, Users, Notifications, Profile } = require("../models");
+const { Posts, Notifications, Profile, Likes } = require("../models");
 const cloudinary = require("cloudinary").v2;
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
@@ -34,7 +34,6 @@ function uploadBufferToCloudinary(buffer, mimetype, folder) {
     stream.end(buffer);
   });
 }
-
 
 async function newsFeedPost(req, res) {
   try {
@@ -143,7 +142,6 @@ const uploadedVideos = await Promise.all(
   }
 }
 
-
 async function getAllPosts(req, res) {
   try {
     const posts = await Posts.findAll({
@@ -179,6 +177,9 @@ async function  deletePost(req, res) {
   }
 }
 
+async function postLike(req, res) {
+  
+}
 
 
 module.exports = { newsFeedPost, getAllPosts, deletePost };
