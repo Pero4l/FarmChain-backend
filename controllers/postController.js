@@ -214,22 +214,21 @@ async function postLike(req, res) {
 
     // ========== IF USER HAS NOT LIKED (LIKE) ==========
     await Likes.create({
-      postId,
-      userId,
+      user_id: userId,
+      post_id: postId,
+      is_like: true
     });
 
     post.likes = post.likes + 1;
     await post.save();
 
     // Create notification only if liking someone else's post
-    if (post.userId !== userId) {
-      await Notifications.create({
-      user_id: userId,
+    await Notifications.create({
+      user_id: post.user_id,
       type: "like",
       notification: `${user.first_name} ${user.last_name} liked your post`,
       is_read: false,
       });
-    }
 
     return res.status(200).json({
       success: true,
