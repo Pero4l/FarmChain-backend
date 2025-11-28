@@ -194,7 +194,7 @@ async function postLike(req, res) {
 
     // 2. Check if user already liked this post
     const existingLike = await Likes.findOne({
-      where: { postId, userId },
+      where: { post_id:postId, user_id:userId },
     });
 
     // ========== IF USER ALREADY LIKED (UNLIKE) ==========
@@ -247,4 +247,4 @@ async function postLike(req, res) {
 }
 
 
-module.exports = { newsFeedPost, getAllPosts, deletePost };
+module.exports = { newsFeedPost, getAllPosts, deletePost, postLike };
