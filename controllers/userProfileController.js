@@ -6,88 +6,93 @@ const getUserById = async (req, res) => {
   try {
     const currentUserId = req.user.userId;
 
-    // Get user
+    // 1️⃣ Get user
     const user = await Users.findByPk(id, {
       attributes: ["id", "first_name", "last_name", "state", "country"],
     });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Get profile
+    // 2️⃣ Get profile
     const profile = await Profile.findOne({
-      where: { user_id: id }
+      where: { user_id: id },
     });
 
-    // Check if current user is following this profile
+    // 3️⃣ Check if current user is following this profile
     const relationship = await Relationship.findOne({
       where: {
         follower_id: currentUserId,
-        followed_id: id
-      }
+        followed_id: id,
+      },
     });
     const isFollowed = relationship ? relationship.following : false;
 
-    // Get followers/following counts
+    // 4️⃣ Get followers/following counts
     const followers = await Relationship.count({
-      where: { followed_id: id, following: true }
+      where: { followed_id: id, following: true },
     });
     const following = await Relationship.count({
-      where: { follower_id: id, following: true }
+      where: { follower_id: id, following: true },
     });
 
-    // User posts count
-    const postsCount = await Posts.count({
-      where: { user_id: id }
+    // 5️⃣ Get user's posts
+    const posts = await Posts.findAll({
+      where: { user_id: id },
+      include: [
+        {
+          model: Likes,
+          as: "likesData",
+          where: { user_id: currentUserId }, // check if current user liked
+          required: false,
+          attributes: ["id"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
     });
 
-    // Likes count
+    // 6️⃣ Add isLike to each post
+    const formattedPosts = posts.map((post) => ({
+      ...post.toJSON(),
+      isLike: post.likesData.length > 0,
+    }));
+
+    // 7️⃣ Count total likes received on all user's posts
     const likesCount = await Likes.count({
-      where: { user_id: id }
+      include: [
+        {
+          model: Posts,
+          as: "post",
+          where: { user_id: id },
+          attributes: [],
+        },
+      ],
     });
 
-const posts = await Posts.findAll({
-  where: { user_id: id },
-  include: [
-    {
-      model: Likes,
-      as: "likesData",
-      where: { user_id: currentUserId },
-      required: false, // <-- important (allows posts with no likes)
-      attributes: ["id"]
-    }
-  ],
-  order: [['createdAt', 'DESC']]
-});
+    // 8️⃣ Count total posts
+    const postsCount = posts.length;
 
-// Add isLike to each post
-const formattedPosts = posts.map(post => ({
-  ...post.toJSON(),
-  isLike: post.likesData.length > 0  // true if user liked
-}));
-
-
-    
-  res.status(200).json({
-  id: user.id,
-  name: `${user.first_name} ${user.last_name}`,
-  location: `${user.state}, ${user.country}`,
-  avatar: profile?.avatar || null,
-  cover_avatar: profile?.cover_avatar || null,
-  bio: profile?.bio || "",
-  organization: profile?.organization || "",
-  verified: profile?.verified,
-  followers,
-  following,
-  isFollowed,
-  postsCount,
-  likesCount,
-  posts: formattedPosts
-});
-
-
+    // 9️⃣ Send response
+    res.status(200).json({
+      id: user.id,
+      name: `${user.first_name} ${user.last_name}`,
+      location: `${user.state}, ${user.country}`,
+      avatar: profile?.avatar || null,
+      cover_avatar: profile?.cover_avatar || null,
+      bio: profile?.bio || "",
+      organization: profile?.organization || "",
+      verified: profile?.verified,
+      followers,
+      following,
+      isFollowed,
+      postsCount,
+      likesCount,
+      posts: formattedPosts,
+    });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Toggle follow/unfollow a user
 const followUser = async (req, res) => {
