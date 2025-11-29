@@ -143,14 +143,33 @@ const uploadedVideos = await Promise.all(
 }
 
 async function getAllPosts(req, res) {
+  const userId = req.user?.userId; 
+
   try {
     const posts = await Posts.findAll({
-      // exclude: ['updatedAt'],
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
+      raw: true, 
     });
+
+    // Add `isLike` per post
+    const postsWithLikeStatus = await Promise.all(
+      posts.map(async (post) => {
+        const liked = userId
+          ? await Likes.findOne({
+              where: { post_id: post.id, user_id: userId },
+            })
+          : null;
+
+        return {
+          ...post,
+          isLike: !!liked, // true if liked, false otherwise
+        };
+      })
+    );
+
     return res.status(200).json({
       success: true,
-      posts,
+      posts: postsWithLikeStatus,
     });
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -161,21 +180,7 @@ async function getAllPosts(req, res) {
   }
 }
 
-async function  deletePost(req, res) {
-  const id = req.body.id;
-  try {
-    const post = await Posts.findOne({ where: { id: id } });
-    if (!post) {
-      return res.status(404).json({ success: false, message: "Post not found" });
-    }
 
-    await post.destroy();
-    return res.status(200).json({ success: true, message: "Post deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting post:", error);
-    return res.status(500).json({ success: false, message: "Server error" });
-  }
-}
 
 async function postLike(req, res) {
   const { postId } = req.body;
@@ -247,6 +252,24 @@ async function postLike(req, res) {
     });
   }
 }
+
+
+async function  deletePost(req, res) {
+  const id = req.body.id;
+  try {
+    const post = await Posts.findOne({ where: { id: id } });
+    if (!post) {
+      return res.status(404).json({ success: false, message: "Post not found" });
+    }
+
+    await post.destroy();
+    return res.status(200).json({ success: true, message: "Post deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+}
+
 
 
 module.exports = { newsFeedPost, getAllPosts, deletePost, postLike };
