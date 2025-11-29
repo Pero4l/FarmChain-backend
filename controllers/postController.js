@@ -181,7 +181,6 @@ async function getAllPosts(req, res) {
 }
 
 
-
 async function postLike(req, res) {
   const { postId } = req.body;
   const user = req.user

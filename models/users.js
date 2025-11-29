@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Users.hasMany(models.Notifications, { foreignKey: 'user_id' });
   Users.hasMany(models.Posts, { foreignKey: 'user_id' });
   Users.hasOne(models.Profile, { foreignKey: 'user_id' });
+  Users.hasMany(models.Likes, { foreignKey: 'user_id' });
 
   // 🔥 Followers (users that follow THIS user)
   Users.belongsToMany(models.Users, {

@@ -1,4 +1,4 @@
-const { Users, Profile, Relationship, Notification, Posts } = require('../models');
+const { Users, Profile, Relationship, Notification, Posts, Likes } = require('../models');
 
 // Get single user by ID
 const getUserById = async (req, res) => {
@@ -39,27 +39,45 @@ const getUserById = async (req, res) => {
       where: { user_id: id }
     });
 
-    const posts = await Posts.findAll({
-      where: { user_id: id },
-      // attributes: ['id', 'content', 'createdAt'],
-      order: [['createdAt', 'DESC']]
-    });
 
-    res.status(200).json({
-      id: user.id,
-      name: `${user.first_name} ${user.last_name}`,
-      location: `${user.state}, ${user.country}`,
-      avatar: profile?.avatar || null,
-      cover_avatar: profile?.cover_avatar || null,
-      bio: profile?.bio || "",
-      organization: profile?.organization || "",
-      verified: profile?.verified,
-      followers,
-      following,
-      isFollowed,
-      postsCount,
-      posts
-    });
+const posts = await Posts.findAll({
+  where: { user_id: id },
+  include: [
+    {
+      model: Likes,
+      as: "likesData",
+      where: { user_id: currentUserId },
+      required: false, // <-- important (allows posts with no likes)
+      attributes: ["id"]
+    }
+  ],
+  order: [['createdAt', 'DESC']]
+});
+
+// Add isLike to each post
+const formattedPosts = posts.map(post => ({
+  ...post.toJSON(),
+  isLike: post.likesData.length > 0  // true if user liked
+}));
+
+
+    
+  res.status(200).json({
+  id: user.id,
+  name: `${user.first_name} ${user.last_name}`,
+  location: `${user.state}, ${user.country}`,
+  avatar: profile?.avatar || null,
+  cover_avatar: profile?.cover_avatar || null,
+  bio: profile?.bio || "",
+  organization: profile?.organization || "",
+  verified: profile?.verified,
+  followers,
+  following,
+  isFollowed,
+  postsCount,
+  posts: formattedPosts
+});
+
 
   } catch (err) {
     res.status(500).json({ error: err.message });
