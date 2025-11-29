@@ -39,6 +39,10 @@ const getUserById = async (req, res) => {
       where: { user_id: id }
     });
 
+    // Likes count
+    const likesCount = await Likes.count({
+      where: { user_id: id }
+    });
 
 const posts = await Posts.findAll({
   where: { user_id: id },
@@ -75,6 +79,7 @@ const formattedPosts = posts.map(post => ({
   following,
   isFollowed,
   postsCount,
+  likesCount,
   posts: formattedPosts
 });
 

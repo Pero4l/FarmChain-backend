@@ -183,8 +183,7 @@ async function getAllPosts(req, res) {
 
 async function postLike(req, res) {
   const { postId } = req.body;
-  const user = req.user
-  const userId = user.userId; 
+  const userId = req.user.userId;
 
   try {
     // 1. Check if post exists
@@ -196,51 +195,61 @@ async function postLike(req, res) {
       });
     }
 
-    // 2. Check if user already liked this post
+    // 2. Check if user already liked
     const existingLike = await Likes.findOne({
-      where: { post_id:postId, user_id:userId },
+      where: { post_id: postId, user_id: userId },
     });
 
-    // ========== IF USER ALREADY LIKED (UNLIKE) ==========
+    // ========= UNLIKE =========
     if (existingLike) {
       await existingLike.destroy();
 
+      // Update cached like count
       post.likes = post.likes - 1;
       await post.save();
+
+      // Return accurate count from DB
+      const totalLikes = await Likes.count({ where: { post_id: postId } });
 
       return res.status(200).json({
         success: true,
         action: "unliked",
         message: "Post unliked",
-        likes: post.likes,
+        likes: totalLikes,
+        isLike: false,
       });
     }
 
-    // ========== IF USER HAS NOT LIKED (LIKE) ==========
+    // ========= LIKE =========
     await Likes.create({
       user_id: userId,
       post_id: postId,
-      is_like: true
+      is_like: true,
     });
 
+    // Update cached likes
     post.likes = post.likes + 1;
     await post.save();
 
+    // Create notification
+   if (post.user_id !== userId) {
+  await Notifications.create({
+    user_id: post.user_id,
+    type: "like",
+    notification: `${req.user.currentUser} liked your post`,
+    is_read: false,
+  });
+}
 
-    // Create notification only if liking someone else's post
-    await Notifications.create({
-      user_id: post.user_id,
-      type: "like",
-      notification: `${user.currentUser} liked your post`,
-      is_read: false,
-      });
+    // Return accurate count from DB
+    const totalLikes = await Likes.count({ where: { post_id: postId } });
 
     return res.status(200).json({
       success: true,
       action: "liked",
       message: "Post liked",
-      likes: post.likes,
-      isLike: true
+      likes: totalLikes,
+      isLike: true,
     });
 
   } catch (error) {
@@ -251,6 +260,7 @@ async function postLike(req, res) {
     });
   }
 }
+
 
 
 async function  deletePost(req, res) {
