@@ -185,22 +185,48 @@ const getUserProfile = async (req, res) => {
       where: { follower_id: id }
     });
 
-      // User posts count
-    const postsCount = await Posts.count({
-      where: { user_id: id }
-    });
-
+     //  Get user's posts
     const posts = await Posts.findAll({
       where: { user_id: id },
-      // attributes: ['id', 'content', 'createdAt'],
-      order: [['createdAt', 'DESC']]
+      include: [
+        {
+          model: Likes,
+          as: "likesData",
+          where: { user_id: id }, // check if current user liked
+          required: false,
+          attributes: ["id"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
     });
+
+    // Add isLike to each post
+    const formattedPosts = posts.map((post) => ({
+      ...post.toJSON(),
+      isLike: post.likesData.length > 0,
+    }));
+
+    //  Count total likes received on all user's posts
+    const likesCount = await Likes.count({
+      include: [
+        {
+          model: Posts,
+          as: "post",
+          where: { user_id: id },
+          attributes: [],
+        },
+      ],
+    });
+
+    // 8️⃣ Count total posts
+    const postsCount = posts.length;
 
     const personalProfile = {
       followers: followers,
       following: following,
       totalPost: postsCount,
-      posts: posts
+      posts: formattedPosts,
+      totalLikes: likesCount
     }
 
     res.status(200).json({
