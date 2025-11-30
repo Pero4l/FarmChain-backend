@@ -5,6 +5,7 @@ const { register, login } = require('../controllers/userController');
 const { getAllUsers, getUserById, followUser, getUserProfile } = require('../controllers/userProfileController');
 const { loginMiddleware } = require('../middleware/loginMiddleware');
 const { authMiddleware } = require('../middleware/authUserMiddleware');
+const {getNotification} = require("../controllers/notificationController")
 
 // Auth routes
 router.post('/register', register);
@@ -12,6 +13,9 @@ router.post('/login', loginMiddleware, login);
 
 // Follow / Unfollow route
 router.post('/follow', authMiddleware, followUser);
+
+// User Notification
+router.get('/notification', authMiddleware, getNotification)
 
 // User routes
 router.get('/all', authMiddleware, getAllUsers);

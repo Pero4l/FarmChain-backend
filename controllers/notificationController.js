@@ -16,3 +16,5 @@ async function getNotification(req, res){
     })
 };
 
+
+module.exports = {getNotification}
