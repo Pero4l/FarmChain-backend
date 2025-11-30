@@ -218,7 +218,7 @@ const getUserProfile = async (req, res) => {
       ],
     });
 
-    // 8️⃣ Count total posts
+    // Count total posts
     const postsCount = posts.length;
 
     const personalProfile = {
