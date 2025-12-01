@@ -5,7 +5,7 @@ const { register, login } = require('../controllers/userController');
 const { getAllUsers, getUserById, followUser, getUserProfile } = require('../controllers/userProfileController');
 const { loginMiddleware } = require('../middleware/loginMiddleware');
 const { authMiddleware } = require('../middleware/authUserMiddleware');
-const {getNotification} = require("../controllers/notificationController")
+const {getNotification, deleteNotification} = require("../controllers/notificationController")
 
 // Auth routes
 router.post('/register', register);
@@ -20,6 +20,7 @@ router.get('/notification', authMiddleware, getNotification)
 // User routes
 router.get('/all', authMiddleware, getAllUsers);
 router.get('/profile', authMiddleware, getUserProfile)
+router.delete('/notification/:id', authMiddleware, deleteNotification)
 router.get('/:id', authMiddleware, getUserById);
 
 module.exports = router;
