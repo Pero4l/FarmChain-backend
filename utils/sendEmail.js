@@ -1,28 +1,35 @@
-async function forgotPassword(req, res) {
-  const { email } = req.body;
+// utils/sendEmail.js
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 
+async function sendOTPEmail(email, otp) {
   try {
-    const user = await Users.findOne({ where: { email } });
-    if (!user)
-      return res.status(404).json({ success: false, message: "User not found" });
-
-    const otp = generateOTP();
-    const expires = new Date(Date.now() + 5 * 60 * 1000);
-
-    await user.update({
-      otpCode: otp,
-      otpExpiresAt: expires,
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
     });
 
-    // ---- SEND OTP EMAIL HERE ----
-    await sendOTPEmail(email, otp);
+    const mailOptions = {
+      from: `"FarmChain Support" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Your FarmChain OTP Code",
+      html: `
+        <h2>FarmChain OTP Verification</h2>
+        <p>Your 4-digit OTP code is:</p>
+        <h1 style="font-size: 32px; letter-spacing: 6px;">${otp}</h1>
+        <p>This code expires in <b>5 minutes</b>.</p>
+      `,
+    };
 
-    res.json({
-      success: true,
-      message: "OTP sent to your email",
-    });
+    await transporter.sendMail(mailOptions);
+    console.log("OTP sent successfully");
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ success: false, message: "Server error" });
+    console.error("SEND OTP ERROR:", err);
+    throw err; // so controller can catch it
   }
 }
+
+module.exports = { sendOTPEmail };

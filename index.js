@@ -3,7 +3,8 @@ require("dotenv").config();
 const app = express();
 app.use(express.json());
 const cors = require('cors');
-app.use(cors({ origin: '*' })); // Or restrict to your frontend URL
+app.use(cors({ origin: '*' })); 
+app.use(express.urlencoded({ extended: true }));
 
 
 const userAuth = require("./router/user.route");
