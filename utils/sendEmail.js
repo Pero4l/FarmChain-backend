@@ -8,7 +8,7 @@ async function sendOTPEmail(email, otp) {
       service: "gmail",
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        pass: process.env.EMAIL_PASS, // Must be APP PASSWORD
       },
     });
 
@@ -27,8 +27,9 @@ async function sendOTPEmail(email, otp) {
     await transporter.sendMail(mailOptions);
     console.log("OTP sent successfully");
   } catch (err) {
-    console.error("SEND OTP ERROR:", err);
-    throw err; // so controller can catch it
+    console.error("SEND OTP ERROR CODE:", err.code);
+    console.error("SEND OTP FULL ERROR:", err);
+    throw err;
   }
 }
 
