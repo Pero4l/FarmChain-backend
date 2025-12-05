@@ -155,3 +155,40 @@ video: [upload video files]
 // }
 
 // module.exports = { newsFeedPost };
+
+
+
+Domain Verification
+DKIM
+Type	Name	Content	TTL	Priority
+TXT	
+resend._domainkey
+p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCgo/M5HNmzQJj/n/le0DgGA7QaeQp0pJZg4zQbkCZNQ8es5Qxl56I+O8voCCgL7WmxqkBtqWWKNs9uR+4a67M5mxBNyUYQBX6a9qqi6Jd+qqp0lUg5Cr9gmqGOqbAH7GFr4SaH/1MILbDXfCovDrqbNxIIkChHtB2TwaW2wk1VBQIDAQAB
+Auto	
+Enable Sending
+
+SPF
+Type	Name	Content	TTL	Priority
+MX	
+send
+feedback-smtp.us-east-1.amazonses.com
+Auto	10
+TXT	
+send
+v=spf1 include:amazonses.com ~all
+Auto	
+DMARC
+(Optional)
+Type	Name	Content	TTL
+TXT	
+_dmarc
+v=DMARC1; p=none;
+Auto
+Enable Receiving
+
+MX
+Type	Name	Content	TTL	Priority
+MX	
+@
+inbound-smtp.us-east-1.amazonaws.com
+Auto	10
