@@ -1,4 +1,4 @@
-const { Users, Posts, Notifications, Relationship, Profile } = require("../models");
+const { Users, Notifications, Profile } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -144,6 +144,12 @@ async function login(req, res) {
 });
 
 
+// Notification count
+const notificationCount = await Notifications.count({
+  where: { user_id: user.userId, is_read: false }
+});
+
+
 const personalProfile = {
   name: user.currentUser,
   location: profile?.location || "",
@@ -152,6 +158,7 @@ const personalProfile = {
   bio: profile?.bio || "",
   organization: profile?.organization || "",
   verified: profile?.verified || false,
+  unreadNotifications: notificationCount,
   // share_account: profile?.share_account || ""
 };
 
