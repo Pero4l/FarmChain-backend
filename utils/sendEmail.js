@@ -64,6 +64,7 @@
 
 
 
+
 // utils/sendEmail.js
 require("dotenv").config();
 const sgMail = require("@sendgrid/mail");
@@ -74,7 +75,7 @@ async function sendOTPEmail(email, otp) {
     const msg = {
       to: email,
       from: {
-        email: "farmchaininfo@gmail.com", // MUST be a verified sender
+        email: "farmchaininfo@gmail.com",
         name: "FarmChain Support"
       },
       subject: "Your FarmChain Verification Code",

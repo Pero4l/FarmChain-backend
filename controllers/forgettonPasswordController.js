@@ -1,36 +1,57 @@
 const { Users } = require('../models');
 const bcrypt = require("bcrypt");
-const { sendOTPEmail } = require("../utils/sendEmail"); // ✅ correct import
-
+const { sendOTPEmail } = require("../utils/sendEmail"); 
 
 const generateOTP = () => Math.floor(1000 + Math.random() * 9000).toString();
+
+
 
 // POST /auth/forgot-password
 async function forgotPassword(req, res) {
   const { email } = req.body;
 
-  if (!email)
+  if (!email) {
     return res.status(400).json({ success: false, message: "Email is required" });
+  }
 
   try {
     const user = await Users.findOne({ where: { email } });
-    if (!user)
+
+    if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
+    }
 
     const otp = generateOTP();
-    const expires = new Date(Date.now() + 5 * 60 * 1000);
+    const expires = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
-    await user.update({ otpCode: otp, otpExpiresAt: expires });
+    // Update user OTP fields correctly
+    // await user.update({
+    //   otpCode: otp,
+    //   otpExpiresAt: expires,
+    // });
 
-    // send OTP email
+  
+    user.otpCode = otp;
+    user.otpExpiresAt = expires;
+    await user.save();
+
+    // Send email
     await sendOTPEmail(email, otp);
 
-    res.json({ success: true, message: "OTP sent to your email" });
+    return res.json({
+      success: true,
+      message: "OTP sent to your email",
+    });
+
   } catch (err) {
     console.error("FORGOT PASSWORD ERROR:", err);
-    res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 }
+
 
 
 // POST /auth/verify-otp
