@@ -56,6 +56,38 @@ async function deleteNotification(req, res) {
   }
 }
 
+async function markNotificationAsRead(req, res) {
+  const userId = req.user?.userId;
+  const notificationId = req.params.id;
+
+  try {
+    const notification = await Notifications.findOne({
+      where: { id: notificationId, user_id: userId },
+    });
+
+    if (!notification) {
+      return res.status(404).json({
+        success: false,
+        message: "Notification not found",
+      });
+    }
+
+    notification.is_read = true;
+    await notification.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Notification marked as read successfully",
+    });
+  } catch (err) {
+    console.error("Error marking notification as read:", err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to mark notification as read",
+    });
+  }
+}
 
 
-module.exports = {getNotification, deleteNotification};
+
+module.exports = {getNotification, deleteNotification, markNotificationAsRead};
