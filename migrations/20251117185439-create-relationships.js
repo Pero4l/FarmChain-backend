@@ -7,13 +7,13 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       follower_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       followed_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       following: {
         type: Sequelize.BOOLEAN
