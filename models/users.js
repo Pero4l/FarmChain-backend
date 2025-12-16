@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Users.hasMany(models.Posts, { foreignKey: 'user_id' });
   Users.hasOne(models.Profile, { foreignKey: 'user_id' });
   Users.hasMany(models.Likes, { foreignKey: 'user_id' });
+  
 
   // 🔥 Followers (users that follow THIS user)
   Users.belongsToMany(models.Users, {
@@ -31,6 +32,15 @@ module.exports = (sequelize, DataTypes) => {
     foreignKey: "follower_id",
     otherKey: "followed_id",
     as: "following"
+  });
+
+  // Messaging associations
+   Users.hasMany(models.Message, {
+    foreignKey: "sender_id",
+  });
+
+  Users.hasMany(models.ConversationMember, {
+    foreignKey: "user_id",
   });
 }
 
