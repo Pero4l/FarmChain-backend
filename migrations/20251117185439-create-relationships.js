@@ -5,7 +5,6 @@ module.exports = {
     await queryInterface.createTable('relationships', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.UUID
       },

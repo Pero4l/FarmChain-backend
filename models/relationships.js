@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
 
   
   relationships.init({
-    follower_id: DataTypes.INTEGER,
-    followed_id: DataTypes.INTEGER,
+    follower_id: DataTypes.UUID,
+    followed_id: DataTypes.UUID,
     following: DataTypes.BOOLEAN
   }, {
     sequelize,

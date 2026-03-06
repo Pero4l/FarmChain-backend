@@ -1,4 +1,4 @@
-const { Users, Profile, Relationship, Notification, Posts, Likes } = require('../models');
+const { Users, Profile, Relationship, Notifications, Posts, Likes } = require('../models');
 
 // Get single user by ID
 const getUserById = async (req, res) => {
@@ -138,11 +138,11 @@ const followUser = async (req, res) => {
     const followersCount = await Relationship.count({ where: { followed_id: followedId } });
 
     // Create notification safely
-    if (Notification) {
+    if (Notifications) {
       const user = await Users.findByPk(followerId, { attributes: ["first_name", "last_name"] });
 
       if (user) {
-        await Notification.create({
+        await Notifications.create({
           user_id: followedId,
           type: 'social',
           notification: `${user.first_name} ${user.last_name} started following you.`,
@@ -177,62 +177,62 @@ const getUserProfile = async (req, res) => {
   const id = req.user?.userId
 
 
-    // Followers
-     const followers = await Relationship.count({
-      where: { followed_id: id }
-    });
-    const following = await Relationship.count({
-      where: { follower_id: id }
-    });
+  // Followers
+  const followers = await Relationship.count({
+    where: { followed_id: id }
+  });
+  const following = await Relationship.count({
+    where: { follower_id: id }
+  });
 
-     //  Get user's posts
-    const posts = await Posts.findAll({
-      where: { user_id: id },
-      include: [
-        {
-          model: Likes,
-          as: "likesData",
-          where: { user_id: id }, // check if current user liked
-          required: false,
-          attributes: ["id"],
-        },
-      ],
-      order: [["createdAt", "DESC"]],
-    });
+  //  Get user's posts
+  const posts = await Posts.findAll({
+    where: { user_id: id },
+    include: [
+      {
+        model: Likes,
+        as: "likesData",
+        where: { user_id: id }, // check if current user liked
+        required: false,
+        attributes: ["id"],
+      },
+    ],
+    order: [["createdAt", "DESC"]],
+  });
 
-    // Add isLike to each post
-    const formattedPosts = posts.map((post) => ({
-      ...post.toJSON(),
-      isLike: post.likesData.length > 0,
-    }));
+  // Add isLike to each post
+  const formattedPosts = posts.map((post) => ({
+    ...post.toJSON(),
+    isLike: post.likesData.length > 0,
+  }));
 
-    //  Count total likes received on all user's posts
-    const likesCount = await Likes.count({
-      include: [
-        {
-          model: Posts,
-          as: "post",
-          where: { user_id: id },
-          attributes: [],
-        },
-      ],
-    });
+  //  Count total likes received on all user's posts
+  const likesCount = await Likes.count({
+    include: [
+      {
+        model: Posts,
+        as: "post",
+        where: { user_id: id },
+        attributes: [],
+      },
+    ],
+  });
 
-    // Count total posts
-    const postsCount = posts.length;
+  // Count total posts
+  const postsCount = posts.length;
 
-    const personalProfile = {
-      followers: followers,
-      following: following,
-      totalPost: postsCount,
-      posts: formattedPosts,
-      totalLikes: likesCount
-    }
+  const personalProfile = {
+    followers: followers,
+    following: following,
+    totalPost: postsCount,
+    posts: formattedPosts,
+    totalLikes: likesCount
+  }
 
-    res.status(200).json({
-      "message": "User profile retrived successfully",
-      "data": personalProfile
-    })
+  res.status(200).json({
+    "message": "User profile retrived successfully",
+    "data": personalProfile
+  })
 
 }
 
