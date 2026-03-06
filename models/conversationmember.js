@@ -11,16 +11,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-       ConversationMember.belongsTo(models.Conversation, {
-    foreignKey: "conversation_id",
-  });
+      ConversationMember.belongsTo(models.Conversation, {
+        foreignKey: "conversation_id",
+      });
 
-  ConversationMember.belongsTo(models.Users, {
-    foreignKey: "user_id",
-  });
+      ConversationMember.belongsTo(models.Users, {
+        foreignKey: "user_id",
+      });
     }
   }
   ConversationMember.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
     conversation_id: DataTypes.UUID,
     user_id: DataTypes.UUID
   }, {

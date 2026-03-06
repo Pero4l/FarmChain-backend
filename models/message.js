@@ -13,15 +13,20 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
 
       Message.belongsTo(models.Conversation, {
-    foreignKey: "conversation_id",
-  });
+        foreignKey: "conversation_id",
+      });
 
-  Message.belongsTo(models.Users, {
-    foreignKey: "sender_id",
-  });
+      Message.belongsTo(models.Users, {
+        foreignKey: "sender_id",
+      });
     }
   }
   Message.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
     conversation_id: DataTypes.UUID,
     sender_id: DataTypes.UUID,
     content: DataTypes.TEXT

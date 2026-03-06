@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     Comment.init({
+        id: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true
+        },
         user_id: DataTypes.UUID,
         post_id: DataTypes.UUID,
         content: DataTypes.TEXT

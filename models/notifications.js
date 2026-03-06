@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   notifications.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
     user_id: DataTypes.UUID,
     type: DataTypes.STRING,
     notification: DataTypes.STRING,

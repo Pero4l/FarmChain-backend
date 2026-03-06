@@ -25,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
 
   }
   posts.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
     user_id: DataTypes.UUID,
     farmer: DataTypes.STRING,
     location: DataTypes.STRING,

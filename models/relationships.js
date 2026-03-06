@@ -13,21 +13,26 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
 
       // relationship → follower
-     relationships.belongsTo(models.Users, {
-    foreignKey: "follower_id",
-    as: "follower"
-  });
+      relationships.belongsTo(models.Users, {
+        foreignKey: "follower_id",
+        as: "follower"
+      });
 
-  // relationship → followed user
-  relationships.belongsTo(models.Users, {
-    foreignKey: "followed_id",
-    as: "followed"
-  });
+      // relationship → followed user
+      relationships.belongsTo(models.Users, {
+        foreignKey: "followed_id",
+        as: "followed"
+      });
     }
   }
 
-  
+
   relationships.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
     follower_id: DataTypes.UUID,
     followed_id: DataTypes.UUID,
     following: DataTypes.BOOLEAN
