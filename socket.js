@@ -9,21 +9,21 @@ module.exports = (io) => {
       socket.join(`chat_${conversationId}`);
     });
 
-    // Send message
+    // Send message (Broadcasting only, assuming already saved via REST)
     socket.on("send_message", async (data) => {
-      const { conversationId, senderId, content } = data;
+      const { conversationId, senderId, content, id, createdAt, user } = data;
 
-      if (!content) return;
-
-      // Save to database
-      const message = await Message.create({
-        conversation_id: conversationId,
-        sender_id: senderId,
-        content,
-      });
+      if (!content && !data.message) return;
 
       // Broadcast to all users in this conversation room
-      io.to(`chat_${conversationId}`).emit("receive_message", message);
+      io.to(`chat_${conversationId}`).emit("receive_message", {
+        id: id,
+        conversation_id: conversationId,
+        sender_id: senderId,
+        content: content || data.message,
+        createdAt: createdAt || new Date(),
+        User: user
+      });
     });
 
     socket.on("disconnect", () => {

@@ -43,6 +43,7 @@ const io = new Server(server, {
 });
 require("./socket")(io); // pass io to your socket file
 
+
 // Start server after DB sync
 const PORT = process.env.PORT || 3001;
 
