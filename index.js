@@ -47,7 +47,7 @@ require("./socket")(io); // pass io to your socket file
 // Start server after DB sync
 const PORT = process.env.PORT || 3001;
 
-db.sync({ force: false, alter: false })
+db.sync({ force: false, alter: true })
   .then(() => {
     server.listen(PORT, () => { // 🔹 use server.listen, not app.listen
       console.log(
