@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 
       ConversationMember.belongsTo(models.Users, {
         foreignKey: "user_id",
+        as: "User"
       });
     }
   }

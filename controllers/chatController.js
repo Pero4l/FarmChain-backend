@@ -92,31 +92,68 @@ const getUserConversations = async (req, res) => {
   try {
     const userId = req.user.userId;
 
+    // Find all conversations where the current user is a member
+    const userConversations = await ConversationMember.findAll({
+      where: { user_id: userId },
+      attributes: ['conversation_id']
+    });
+
+    const conversationIds = userConversations.map(uc => uc.conversation_id);
+
+    if (conversationIds.length === 0) {
+      return res.json({ success: true, data: [] });
+    }
+
     const conversations = await Conversation.findAll({
+      where: { id: conversationIds },
       include: [
         {
           model: ConversationMember,
-          // We don't filter members here because we want to see ALL members (including the "other" person)
+          as: 'ConversationMembers',
           include: [{
             model: Users,
+            as: 'User',
             attributes: ["id", "first_name", "last_name"],
             include: [{ model: Profile, attributes: ["avatar", "verified"] }]
           }],
         },
+        {
+          model: Message,
+          limit: 1,
+          order: [["createdAt", "DESC"]],
+          as: 'Messages'
+        }
       ],
-      // But we only want conversations that the current user is part of
-      where: Sequelize.literal(`EXISTS (
-        SELECT 1 FROM conversation_members 
-        WHERE conversation_members.conversation_id = Conversation.id 
-        AND conversation_members.user_id = '${userId}'
-      )`),
-      order: [["createdAt", "DESC"]],
+      order: [["updatedAt", "DESC"]],
     });
 
-    res.json(conversations);
+    // Format the response to match frontend expectations (participant, lastMessage)
+    const formattedConversations = conversations.map(conv => {
+      const convJson = conv.toJSON();
+      // Find the "other" participant
+      const otherMember = convJson.ConversationMembers.find(m => m.user_id !== userId);
+      const participant = otherMember ? {
+        id: otherMember.User.id,
+        name: `${otherMember.User.first_name} ${otherMember.User.last_name}`,
+        avatar: otherMember.User.Profile?.avatar,
+        online: false // Default to false if no online status tracking
+      } : null;
+
+      return {
+        id: convJson.id,
+        participant,
+        lastMessage: convJson.Messages && convJson.Messages.length > 0 ? {
+          message: convJson.Messages[0].content,
+          createdAt: convJson.Messages[0].createdAt
+        } : null,
+        updatedAt: convJson.updatedAt
+      };
+    });
+
+    res.json({ success: true, data: formattedConversations });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("[getUserConversations Error]:", error);
+    res.status(500).json({ success: false, message: "Server error", details: error.message });
   }
 };
 

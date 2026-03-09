@@ -42,12 +42,12 @@ const io = new Server(server, {
   cors: { origin: "*" },
 });
 require("./socket")(io); // pass io to your socket file
-
-
+  
 // Start server after DB sync
+
 const PORT = process.env.PORT || 3001;
 
-db.sync({ force: false, alter: true })
+db.sync({ force: false, alter: false })
   .then(() => {
     server.listen(PORT, () => { // 🔹 use server.listen, not app.listen
       console.log(
