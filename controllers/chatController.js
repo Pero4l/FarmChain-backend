@@ -6,7 +6,11 @@ const getOrCreateConversation = async (req, res) => {
     const userId = req.user.userId;
     const otherUserId = req.body.otherUserId || req.body.receiverId;
 
-    if (!otherUserId) return res.status(400).json({ message: "Other user ID is required" });
+    if (!otherUserId) return res.status(400).json({
+      success: false,
+      message: "Other user ID is required",
+      receivedBody: req.body
+    });
 
     // Find existing conversation between these two users
     const existingConversation = await Conversation.findOne({
@@ -124,10 +128,15 @@ const getMessages = async (req, res) => {
 const sendMessage = async (req, res) => {
   try {
     const senderId = req.user.userId;
-    const { conversationId, receiverId } = req.body;
+    const conversationId = req.body.conversationId || req.body.conversation_id;
+    const receiverId = req.body.receiverId || req.body.receiver_id;
     const content = req.body.content || req.body.message;
 
-    if (!content) return res.status(400).json({ message: "Message cannot be empty" });
+    if (!content) return res.status(400).json({
+      success: false,
+      message: "Message cannot be empty",
+      receivedBody: req.body
+    });
 
     const message = await Message.create({
       conversation_id: conversationId,

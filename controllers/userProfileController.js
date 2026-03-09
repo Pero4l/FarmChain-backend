@@ -98,11 +98,18 @@ const getUserById = async (req, res) => {
 const followUser = async (req, res) => {
   try {
     const followerId = req.user?.userId;
-    const followedId = req.body?.followed_id;
+    const followedId = req.body?.followed_id || req.body?.followedId;
 
-    if (!followerId) return res.status(401).json({ error: "Unauthorized" });
-    if (!followedId) return res.status(400).json({ error: "followed_id is required" });
-    if (followerId === followedId) return res.status(400).json({ error: "You cannot follow yourself" });
+    if (!followerId) return res.status(401).json({ success: false, message: "Unauthorized" });
+    if (!followedId) return res.status(400).json({
+      success: false,
+      message: "followed_id or followedId is required",
+      receivedBody: req.body
+    });
+    if (followerId === followedId) return res.status(400).json({
+      success: false,
+      message: "You cannot follow yourself"
+    });
 
     // Check if relationship exists
     let relationship = await Relationship.findOne({
