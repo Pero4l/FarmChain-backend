@@ -146,7 +146,7 @@ const getUserConversations = async (req, res) => {
         id: convJson.id,
         participant,
         lastMessage: convJson.Messages && convJson.Messages.length > 0 ? {
-          message: convJson.Messages[0].content,
+          content: convJson.Messages[0].content,
           createdAt: convJson.Messages[0].createdAt
         } : null,
         updatedAt: convJson.updatedAt
@@ -187,7 +187,7 @@ const getMessages = async (req, res) => {
 const sendMessage = async (req, res) => {
   try {
     const senderId = req.user.userId;
-    const conversationId = req.body.conversationId || req.body.conversation_id;
+    let conversationId = req.body.conversationId || req.body.conversation_id;
     const receiverId = req.body.receiverId || req.body.receiver_id;
     const content = req.body.content || req.body.message;
 
@@ -197,11 +197,55 @@ const sendMessage = async (req, res) => {
       receivedBody: req.body
     });
 
+    // If conversationId is missing, try to find or create one
+    if (!conversationId && receiverId) {
+      console.log(`[sendMessage] Missing conversationId, attempting to resolve for receiver: ${receiverId}`);
+
+      // Find existing conversation
+      const conversations = await Conversation.findAll({
+        include: [{
+          model: ConversationMember,
+          as: 'ConversationMembers',
+          where: { user_id: senderId }
+        }]
+      });
+
+      for (const conv of conversations) {
+        const otherMember = await ConversationMember.findOne({
+          where: { conversation_id: conv.id, user_id: receiverId }
+        });
+        if (otherMember) {
+          conversationId = conv.id;
+          break;
+        }
+      }
+
+      // If still no conversation, create one
+      if (!conversationId) {
+        const newConv = await Conversation.create();
+        await ConversationMember.bulkCreate([
+          { conversation_id: newConv.id, user_id: senderId },
+          { conversation_id: newConv.id, user_id: receiverId },
+        ]);
+        conversationId = newConv.id;
+      }
+    }
+
+    if (!conversationId) {
+      return res.status(400).json({
+        success: false,
+        message: "Conversation ID or Receiver ID is required"
+      });
+    }
+
     const message = await Message.create({
       conversation_id: conversationId,
       sender_id: senderId,
       content,
     });
+
+    // Update conversation's updatedAt to bubble it to the top
+    await Conversation.update({ updatedAt: new Date() }, { where: { id: conversationId } });
 
     const fullMessage = await Message.findByPk(message.id, {
       include: [{
