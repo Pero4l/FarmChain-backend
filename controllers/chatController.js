@@ -18,10 +18,10 @@ const getOrCreateConversation = async (req, res) => {
     });
 
     // Find existing conversation between these two users
-    // We search for a conversation that has BOTH members
     const conversations = await Conversation.findAll({
       include: [{
         model: ConversationMember,
+        as: 'ConversationMembers',
         where: { user_id: userId }
       }]
     });
@@ -39,20 +39,21 @@ const getOrCreateConversation = async (req, res) => {
     }
 
     if (existingConversation) {
-      // Return existing conversation with members
       const fullConversation = await Conversation.findByPk(existingConversation.id, {
         include: [
           {
             model: ConversationMember,
+            as: 'ConversationMembers',
             include: [{
               model: Users,
+              as: 'User',
               attributes: ["id", "first_name", "last_name"],
               include: [{ model: Profile, attributes: ["avatar", "verified"] }]
             }]
           }
         ]
       });
-      return res.json({ success: true, ...fullConversation.toJSON() });
+      return res.json({ success: true, data: fullConversation.toJSON() });
     }
 
     // Create new conversation
@@ -67,8 +68,10 @@ const getOrCreateConversation = async (req, res) => {
       include: [
         {
           model: ConversationMember,
+          as: 'ConversationMembers',
           include: [{
             model: Users,
+            as: 'User',
             attributes: ["id", "first_name", "last_name"],
             include: [{ model: Profile, attributes: ["avatar", "verified"] }]
           }]
@@ -76,9 +79,9 @@ const getOrCreateConversation = async (req, res) => {
       ]
     });
 
-    res.status(201).json({ success: true, ...createdConversation.toJSON() });
+    res.status(201).json({ success: true, data: createdConversation.toJSON() });
   } catch (error) {
-    console.error("[Chat Error]:", error);
+    console.error("[getOrCreateConversation Error]:", error);
     res.status(500).json({
       success: false,
       message: "Server error",
@@ -136,7 +139,7 @@ const getUserConversations = async (req, res) => {
         id: otherMember.User.id,
         name: `${otherMember.User.first_name} ${otherMember.User.last_name}`,
         avatar: otherMember.User.Profile?.avatar,
-        online: false // Default to false if no online status tracking
+        online: false
       } : null;
 
       return {
@@ -166,16 +169,17 @@ const getMessages = async (req, res) => {
       where: { conversation_id: conversationId },
       include: [{
         model: Users,
+        as: 'User',
         attributes: ["id", "first_name", "last_name"],
         include: [{ model: Profile, attributes: ["avatar"] }]
       }],
       order: [["createdAt", "ASC"]],
     });
 
-    res.json(messages);
+    res.json({ success: true, data: messages });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("[getMessages Error]:", error);
+    res.status(500).json({ success: false, message: "Server error", details: error.message });
   }
 };
 
@@ -202,15 +206,16 @@ const sendMessage = async (req, res) => {
     const fullMessage = await Message.findByPk(message.id, {
       include: [{
         model: Users,
+        as: 'User',
         attributes: ["id", "first_name", "last_name"],
         include: [{ model: Profile, attributes: ["avatar"] }]
       }]
     });
 
-    res.status(201).json(fullMessage);
+    res.status(201).json({ success: true, data: fullMessage });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("[sendMessage Error]:", error);
+    res.status(500).json({ success: false, message: "Server error", details: error.message });
   }
 };
 
