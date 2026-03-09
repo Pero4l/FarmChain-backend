@@ -12,17 +12,31 @@ const getOrCreateConversation = async (req, res) => {
       receivedBody: req.body
     });
 
-    // Find existing conversation between these two users
-    const existingConversation = await Conversation.findOne({
-      include: [
-        {
-          model: ConversationMember,
-          where: { user_id: { [Op.in]: [userId, otherUserId] } },
-        },
-      ],
-      group: ["Conversation.id"],
-      having: Sequelize.literal("COUNT(*) = 2"),
+    if (userId === otherUserId) return res.status(400).json({
+      success: false,
+      message: "You cannot start a chat with yourself"
     });
+
+    // Find existing conversation between these two users
+    // We search for a conversation that has BOTH members
+    const conversations = await Conversation.findAll({
+      include: [{
+        model: ConversationMember,
+        where: { user_id: userId }
+      }]
+    });
+
+    let existingConversation = null;
+
+    for (const conv of conversations) {
+      const otherMember = await ConversationMember.findOne({
+        where: { conversation_id: conv.id, user_id: otherUserId }
+      });
+      if (otherMember) {
+        existingConversation = conv;
+        break;
+      }
+    }
 
     if (existingConversation) {
       // Return existing conversation with members
@@ -64,8 +78,12 @@ const getOrCreateConversation = async (req, res) => {
 
     res.status(201).json({ success: true, ...createdConversation.toJSON() });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("[Chat Error]:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      details: error.message
+    });
   }
 };
 
