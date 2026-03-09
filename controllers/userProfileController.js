@@ -159,13 +159,14 @@ const followUser = async (req, res) => {
       success: true,
       message: "Followed successfully",
       following: true,
-      followersCount
+      followers: followersCount // Use 'followers' instead of 'followersCount' if needed by frontend
     });
 
   } catch (err) {
     console.error("❌ FollowUser Error:", err);
     return res.status(500).json({
-      error: "Something went wrong",
+      success: false,
+      message: "Something went wrong",
       details: err.message || err
     });
   }

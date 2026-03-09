@@ -4,7 +4,7 @@ const { Op } = Sequelize;
 const getOrCreateConversation = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { otherUserId } = req.body;
+    const otherUserId = req.body.otherUserId || req.body.receiverId;
 
     if (!otherUserId) return res.status(400).json({ message: "Other user ID is required" });
 
@@ -34,7 +34,7 @@ const getOrCreateConversation = async (req, res) => {
           }
         ]
       });
-      return res.json(fullConversation);
+      return res.json({ success: true, ...fullConversation.toJSON() });
     }
 
     // Create new conversation
@@ -58,7 +58,7 @@ const getOrCreateConversation = async (req, res) => {
       ]
     });
 
-    res.status(201).json(createdConversation);
+    res.status(201).json({ success: true, ...createdConversation.toJSON() });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -124,7 +124,8 @@ const getMessages = async (req, res) => {
 const sendMessage = async (req, res) => {
   try {
     const senderId = req.user.userId;
-    const { conversationId, content } = req.body;
+    const { conversationId, receiverId } = req.body;
+    const content = req.body.content || req.body.message;
 
     if (!content) return res.status(400).json({ message: "Message cannot be empty" });
 

@@ -15,5 +15,6 @@ router.get("/messages/:conversationId", authMiddleware, getMessages);
 
 // Send a message
 router.post("/message", authMiddleware, sendMessage);
+router.post("/send", authMiddleware, sendMessage);
 
 module.exports = router;
